@@ -1,0 +1,266 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Felicita Holdings Ltd. - Quote</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            line-height: 1.4;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            border-bottom: 2px solid #ffc527;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .company-name {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .quote-title {
+            font-size: 20px;
+            color: #666;
+        }
+
+        .quote-number {
+            float: right;
+            text-align: right;
+        }
+
+        .quote-number h2 {
+            margin: 0;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .quote-number p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .address-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .billing-info, .service-info {
+            flex: 1;
+            max-width: 45%;
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .address-content {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .line-items {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+
+        .line-items th {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .line-items td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .line-items .description {
+            width: 60%;
+        }
+
+        .line-items .quantity,
+        .line-items .price,
+        .line-items .total {
+            width: 13%;
+            text-align: right;
+        }
+
+        .totals {
+            float: right;
+            width: 300px;
+        }
+
+        .totals table {
+            width: 100%;
+        }
+
+        .totals td {
+            padding: 5px;
+        }
+
+        .totals .label {
+            text-align: left;
+        }
+
+        .totals .amount {
+            text-align: right;
+        }
+
+        .grand-total {
+            font-weight: bold;
+            font-size: 18px;
+            border-top: 2px solid #333;
+        }
+
+        .payment-info {
+            clear: both;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .payment-method {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .cc-notice {
+            color: #ff4444;
+            font-weight: 500;
+            margin: 15px 0;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="header">
+            <div class="quote-number">
+                <h2>Quote #{{quote_number}}</h2>
+                <p>Date: {{current_date}}</p>
+            </div>
+            <div class="company-name">Felicita Holdings Ltd.</div>
+            <div class="quote-title">Quote for Services</div>
+        </div>
+
+        <div class="address-section">
+            <div class="billing-info">
+                <div class="section-title">Billing Address:</div>
+                <div class="address-content">
+                    {{269166485__name}}<br>
+                    {{269166485__address}}<br>
+                    Phone: {{269166485__phone}}<br>
+                    Email: {{269166485__email}}
+                </div>
+            </div>
+            <div class="service-info">
+                <div class="section-title">Company Information:</div>
+                <div class="address-content">
+                    Felicita Holdings Ltd.<br>
+                    GST/HST: 751218744RT0001<br>
+                    Worksafe BC: 201008694<br>
+                    Insurance: CT0000332-00
+                </div>
+            </div>
+        </div>
+
+        <table class="line-items">
+            <thead>
+                <tr>
+                    <th class="description">Description</th>
+                    <th class="quantity">Qty</th>
+                    <th class="price">Unit Price</th>
+                    <th class="total">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="description">{{270257707__output}}</td>
+                    <td class="quantity">1</td>
+                    <td class="price">{{unit_price}}</td>
+                    <td class="total">{{total_price}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="totals">
+            <table>
+                <tr>
+                    <td class="label">Subtotal:</td>
+                    <td class="amount">{{subtotal}}</td>
+                </tr>
+                <tr>
+                    <td class="label">GST (5%):</td>
+                    <td class="amount">{{gst_amount}}</td>
+                </tr>
+                <tr class="grand-total">
+                    <td class="label">Total:</td>
+                    <td class="amount">{{total_with_tax}}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="payment-info">
+            <div class="section-title">Payment Methods:</div>
+            
+            <div class="payment-method">
+                <strong>E-transfer (Preferred)</strong><br>
+                Email: info@azhandyman.ca
+            </div>
+
+            <div class="payment-method">
+                <strong>Direct Deposit</strong><br>
+                Transit Number: 96510<br>
+                Institution Number: 004<br>
+                Account: 5046731
+            </div>
+
+            <div class="payment-method">
+                <strong>Cheque</strong><br>
+                Make payable to: Felicita Holdings Ltd.
+            </div>
+
+            <div class="cc-notice">
+                * Please note: A 2.99% fee applies to all credit card payments
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Thank you for your business. Please contact us with any questions regarding this quote.</p>
+            <p>© 2024 Felicita Holdings Ltd. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
