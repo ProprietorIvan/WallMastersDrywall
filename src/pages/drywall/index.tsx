@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import {
@@ -11,133 +11,13 @@ import {
   Building2,
   Home,
   Check,
-  Calendar,
 } from "lucide-react";
 import Head from "next/head";
 import Image from "next/image";
 import type { NextPage } from "next";
-import { Lead } from "@/utils/createLead";
-
-type CustomerType = "residential" | "commercial" | null;
-type ServiceType = "installation" | "texture" | "commercial" | null;
-
-interface FormData {
-  name: string;
-  phone: string;
-  email: string;
-  address: string;
-  projectDetails: string;
-  serviceType: string;
-  projectSize: string;
-  preferredDate: string;
-}
+import SimpleContactForm from "@/components/SimpleContactForm";
 
 const DrywallPage: NextPage = () => {
-  const [customerType, setCustomerType] = useState<CustomerType>(null);
-  const [serviceType, setServiceType] = useState<ServiceType>(null);
-  const [projectSize, setProjectSize] = useState("");
-  const [preferredDate, setPreferredDate] = useState("");
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [formData, setFormData] = useState<
-    Pick<FormData, "name" | "phone" | "email" | "address" | "projectDetails">
-  >({
-    name: "",
-    phone: "",
-    email: "",
-    address: "",
-    projectDetails: "",
-  });
-
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const submissionData = {
-      ...formData,
-      customerType,
-      serviceType,
-      projectSize,
-      preferredDate,
-    };
-
-    try {
-      const newLead: Lead = {
-        name: formData.name,
-        date_Mjj7SnLm: new Date().toISOString(),
-        lead_status: "New Lead",
-        status_1_Mjj7KSmv:
-          customerType === "commercial" ? "Commercial Form" : "Form Drywall",
-        text_Mjj7Hg3c: `project details: ${formData.projectDetails}, service type: ${serviceType}, customer type: ${customerType}, project size: ${projectSize}, preferred date: ${preferredDate}`,
-        numbers_Mjj7fpib: 0,
-        job_location_mkm418ra: formData.address,
-        lead_phone: formData.phone,
-        lead_email: formData.email,
-        status_1_Mjj77YUc:
-          serviceType === "installation"
-            ? "Drywall Repair"
-            : serviceType === "texture"
-            ? "Drywall Repair"
-            : serviceType === "commercial"
-            ? "Handyman"
-            : "Drywall Repair",
-        status_1_Mjj7Dz0C: "No Payment Due",
-        status_1_Mjj7nPIN: "Not Insurance",
-      };
-
-      fetch("/api/monday", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newLead),
-      });
-    } catch (e) {
-      console.warn(e);
-    }
-
-    try {
-      const response = await fetch("/api/drywall_email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(submissionData),
-      });
-
-      if (response.ok) {
-        // Reset form
-        setShowSuccess(true);
-        setFormData({
-          name: "",
-          phone: "",
-          email: "",
-          address: "",
-          projectDetails: "",
-        });
-        setCustomerType(null);
-        setServiceType(null);
-        setProjectSize("");
-        setPreferredDate("");
-      } else {
-        throw new Error("Failed to submit quote request");
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("There was an error submitting your request. Please try again.");
-    }
-  };
-
   const handleEmergencyCall = () => {
     window.location.href = "tel:+17789074485";
   };
@@ -248,146 +128,59 @@ const DrywallPage: NextPage = () => {
                 <div className="inline-block bg-yellow-400 text-gray-900 px-4 py-1 rounded-full text-sm font-medium mb-6">
                   Vancouver&apos;s Premier Drywall Specialists
                 </div>
-                <h1 className="text-5xl md:text-6xl font-bold mb-6">
-                  Expert Drywall{" "}
-                  <span className="text-yellow-400">Installation</span> &{" "}
-                  <span className="text-yellow-400">Finishing</span>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+                  Expert Drywall Services for Every Need
                 </h1>
-                <p className="text-xl text-gray-200 mb-8 leading-relaxed">
-                  From new installations to perfect texture matching and
-                  commercial solutions, WallMasters delivers flawless results
-                  for all your drywall needs.
+                <p className="text-lg md:text-xl text-white/80 mb-8">
+                  From new installations and repairs to texture matching and
+                  commercial projects, our skilled professionals deliver
+                  exceptional results on time and on budget.
                 </p>
-
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={handleEmergencyCall}
-                    className="group inline-flex items-center justify-center gap-3 bg-yellow-400 text-gray-900 px-8 py-4 rounded-full text-lg font-medium hover:bg-yellow-300 transition-all duration-300"
+                    className="flex items-center justify-center px-6 py-3 font-semibold bg-yellow-400 text-gray-900 rounded-lg hover:bg-yellow-500 transition"
                   >
-                    <Phone className="w-6 h-6" />
-                    <span>Call (778) 907-4485</span>
+                    <Phone className="w-5 h-5 mr-2" />
+                    Call Now
                   </button>
-
-                  <button
-                    onClick={() => {
-                      const contactForm =
-                        document.querySelector("#contactform");
-                      if (contactForm) {
-                        contactForm.scrollIntoView({ behavior: "smooth" });
-                      }
-                    }}
-                    className="group inline-flex items-center justify-center gap-3 bg-transparent border-2 border-white text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-white/10 transition-all duration-300"
+                  <a
+                    href="#get-quote"
+                    className="flex items-center justify-center px-6 py-3 font-semibold bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition"
                   >
-                    <span>Get Free Estimate</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </button>
+                    Get a Free Quote
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </a>
                 </div>
               </div>
-
               <div className="w-full md:w-1/2">
-                <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
+                <div className="rounded-2xl overflow-hidden shadow-2xl">
                   <Image
                     src="/photos/homepage/1.jpg"
-                    alt="Professional Drywall Installation Vancouver"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover"
-                    priority
+                    alt="Professional drywall installation by WallMasters Drywall"
+                    width={600}
+                    height={400}
+                    className="w-full h-auto object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50"></div>
                 </div>
               </div>
             </div>
           </div>
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
         </section>
 
-        {/* Services Section */}
-        <section className="py-20 bg-white" id="services">
+        {/* Services Features */}
+        <section className="py-16 bg-white">
           <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-4 text-gray-900">
-                Our Specialized Drywall Services
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Delivering exceptional quality and craftsmanship for your
-                residential and commercial drywall projects
-              </p>
-            </div>
-
-            <div className="space-y-20">
-              {services.map((service, index) => (
-                <div
-                  key={service.id}
-                  className={`flex flex-col ${
-                    index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                  } gap-8 items-center`}
-                >
-                  <div className="w-full md:w-1/2">
-                    <div className="relative h-[400px] w-full rounded-xl overflow-hidden shadow-lg">
-                      <Image
-                        src={service.image}
-                        alt={service.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full md:w-1/2">
-                    <h3 className="text-3xl font-bold mb-4 text-gray-900">
-                      {service.title}
-                    </h3>
-                    <p className="text-lg text-gray-600 mb-6">
-                      {service.description}
-                    </p>
-                    <ul className="space-y-3 mb-8">
-                      {service.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
-                          <span className="text-gray-700">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <button
-                      onClick={() => {
-                        setServiceType(service.id as ServiceType);
-                        const contactForm =
-                          document.querySelector("#contactform");
-                        if (contactForm) {
-                          contactForm.scrollIntoView({ behavior: "smooth" });
-                        }
-                      }}
-                      className="inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
-                    >
-                      <span>Request a Quote</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Features Grid */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-4 text-gray-900">
-                Why Choose WallMasters Drywall
-              </h2>
-              <p className="text-lg text-gray-600">
-                Vancouver&apos;s most trusted drywall specialists
-              </p>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {serviceFeatures.map((feature, index) => (
                 <div
                   key={index}
-                  className="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300"
+                  className="p-6 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition"
                 >
-                  <div className="text-yellow-500 mb-4">{feature.icon}</div>
+                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                    {feature.icon}
+                  </div>
                   <h3 className="text-xl font-semibold mb-2">
                     {feature.title}
                   </h3>
@@ -398,256 +191,190 @@ const DrywallPage: NextPage = () => {
           </div>
         </section>
 
-        {/* Form Section */}
-        <section className="py-20 bg-white" id="contactform">
-          <div className="max-w-5xl mx-auto px-4">
+        {/* Services Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
-                Schedule Your Drywall Service
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Our Drywall Services
               </h2>
-              <p className="text-lg text-gray-600">
-                Get a free estimate for your project
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Comprehensive drywall solutions for residential and commercial
+                properties
               </p>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl shadow-lg p-8">
-              {showSuccess ? (
-                <SuccessScreen
-                  email={formData.email}
-                  setShowSuccess={setShowSuccess}
-                />
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Service Type Selection */}
-                  <div className="mb-8">
-                    <label className="block text-lg font-medium text-gray-900 mb-4">
-                      Select Service Type *
-                    </label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {services.map((service) => (
-                        <button
-                          key={service.id}
-                          type="button"
-                          onClick={() =>
-                            setServiceType(service.id as ServiceType)
-                          }
-                          className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                            serviceType === service.id
-                              ? "border-gray-900 bg-gray-900/5"
-                              : "border-gray-200 hover:border-gray-400"
-                          }`}
-                        >
-                          <h3
-                            className={`text-lg font-semibold mb-1 ${
-                              serviceType === service.id
-                                ? "text-gray-900"
-                                : "text-gray-700"
-                            }`}
-                          >
-                            {service.id === "installation"
-                              ? "NEW"
-                              : service.id === "texture"
-                              ? "TEXTURE"
-                              : service.id === "commercial"
-                              ? "COMMERCIAL"
-                              : service.title}
-                          </h3>
-                          <p className="text-sm text-gray-600">
-                            {service.features[0]}
-                          </p>
-                        </button>
+            <div className="space-y-16">
+              {services.map((service, index) => (
+                <div
+                  key={service.id}
+                  className={`flex flex-col ${
+                    index % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"
+                  } items-center gap-8 md:gap-12`}
+                >
+                  <div className="w-full md:w-1/2">
+                    <div className="rounded-xl overflow-hidden shadow-lg">
+                      <Image
+                        src={service.image}
+                        alt={service.title}
+                        width={600}
+                        height={400}
+                        className="w-full h-auto object-cover"
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full md:w-1/2">
+                    <h3 className="text-xl font-medium text-yellow-500 mb-2">
+                      {service.title}
+                    </h3>
+                    <p className="text-gray-700 mb-6">{service.description}</p>
+                    <ul className="space-y-3">
+                      {service.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-start">
+                          <div className="flex-shrink-0 mt-1">
+                            <Check className="w-5 h-5 text-green-500" />
+                          </div>
+                          <span className="ml-2.5 text-gray-700">
+                            {feature}
+                          </span>
+                        </li>
                       ))}
-                    </div>
-                  </div>
-
-                  {/* Property Type Selection */}
-                  <div className="mb-8">
-                    <label className="block text-lg font-medium text-gray-900 mb-4">
-                      Property Type *
-                    </label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <button
-                        type="button"
-                        onClick={() => setCustomerType("residential")}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                          customerType === "residential"
-                            ? "border-gray-900 bg-gray-900/5"
-                            : "border-gray-200 hover:border-gray-400"
+                    </ul>
+                    <div className="mt-6">
+                      <a
+                        href={`/${
+                          service.id === "installation"
+                            ? "drywall-installation"
+                            : service.id === "texture"
+                            ? "texture-matching"
+                            : "commercial-drywall"
                         }`}
+                        className="inline-flex items-center text-blue-600 hover:text-blue-700"
                       >
-                        <div className="flex items-center gap-3">
-                          <Home
-                            className={`w-5 h-5 ${
-                              customerType === "residential"
-                                ? "text-gray-900"
-                                : "text-gray-600"
-                            }`}
-                          />
-                          <div>
-                            <h3
-                              className={`text-lg font-semibold mb-1 ${
-                                customerType === "residential"
-                                  ? "text-gray-900"
-                                  : "text-gray-700"
-                              }`}
-                            >
-                              Residential
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                              Home projects
-                            </p>
-                          </div>
-                        </div>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => setCustomerType("commercial")}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                          customerType === "commercial"
-                            ? "border-gray-900 bg-gray-900/5"
-                            : "border-gray-200 hover:border-gray-400"
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <Building2
-                            className={`w-5 h-5 ${
-                              customerType === "commercial"
-                                ? "text-gray-900"
-                                : "text-gray-600"
-                            }`}
-                          />
-                          <div>
-                            <h3
-                              className={`text-lg font-semibold mb-1 ${
-                                customerType === "commercial"
-                                  ? "text-gray-900"
-                                  : "text-gray-700"
-                              }`}
-                            >
-                              Commercial
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                              Business solutions
-                            </p>
-                          </div>
-                        </div>
-                      </button>
+                        Learn more
+                        <ArrowRight className="w-4 h-4 ml-1" />
+                      </a>
                     </div>
                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-                  {/* Contact Form */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-2">
-                        Name *
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-900 mb-2">
-                        Phone *
-                      </label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                        required
-                      />
-                    </div>
-                  </div>
+        {/* Quote Form Section */}
+        <section id="get-quote" className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Request a Free Quote
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Fill out the form below, and we&apos;ll get back to you with a
+                free, no-obligation quote
+              </p>
+            </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Email *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                      required
-                    />
-                  </div>
+            <div className="max-w-xl mx-auto">
+              <SimpleContactForm
+                formTitle="Get Your Free Drywall Quote"
+                serviceName="Drywall Services"
+                apiEndpoint="/api/drywall_email"
+              />
+            </div>
+          </div>
+        </section>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Property Address *
-                    </label>
-                    <input
-                      type="text"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                      required
-                    />
-                  </div>
+        {/* Why Choose Us */}
+        <section className="py-16 bg-gray-900 text-white">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Why Choose WallMasters
+              </h2>
+              <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+                Vancouver&apos;s most trusted drywall repair specialists
+              </p>
+            </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Project Size (sq ft)
-                    </label>
-                    <input
-                      type="number"
-                      value={projectSize}
-                      onChange={(e) => setProjectSize(e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                      placeholder="Approximate square footage"
-                    />
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="bg-gray-800 p-6 rounded-xl">
+                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center mb-4">
+                  <CheckCircle2 className="w-6 h-6 text-gray-900" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">
+                  Experienced Professionals
+                </h3>
+                <p className="text-gray-300">
+                  Our team has years of experience delivering exceptional
+                  drywall services to Vancouver residents and businesses.
+                </p>
+              </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Preferred Start Date
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="date"
-                        value={preferredDate}
-                        onChange={(e) => setPreferredDate(e.target.value)}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                      />
-                      <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
-                    </div>
-                  </div>
+              <div className="bg-gray-800 p-6 rounded-xl">
+                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center mb-4">
+                  <CheckCircle2 className="w-6 h-6 text-gray-900" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">
+                  Quality Materials
+                </h3>
+                <p className="text-gray-300">
+                  We use only premium materials that ensure longevity and
+                  durability for all our drywall installations and repairs.
+                </p>
+              </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Project Details
-                    </label>
-                    <textarea
-                      name="projectDetails"
-                      value={formData.projectDetails}
-                      onChange={handleInputChange}
-                      rows={4}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                      placeholder="Please describe your drywall project needs..."
-                    ></textarea>
-                  </div>
+              <div className="bg-gray-800 p-6 rounded-xl">
+                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center mb-4">
+                  <CheckCircle2 className="w-6 h-6 text-gray-900" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">
+                  Customer Satisfaction
+                </h3>
+                <p className="text-gray-300">
+                  We prioritize your satisfaction and won&apos;t consider a job
+                  complete until you&apos;re 100% happy with our work.
+                </p>
+              </div>
 
-                  <button
-                    type="submit"
-                    className="w-full bg-gray-900 text-white py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors duration-300"
-                  >
-                    Submit Request
-                  </button>
+              <div className="bg-gray-800 p-6 rounded-xl">
+                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center mb-4">
+                  <CheckCircle2 className="w-6 h-6 text-gray-900" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">
+                  Competitive Pricing
+                </h3>
+                <p className="text-gray-300">
+                  We offer fair, transparent pricing with detailed quotes so you
+                  know exactly what to expect with no surprises.
+                </p>
+              </div>
 
-                  <p className="text-sm text-gray-600 text-center">
-                    Fast response • Expert service • Vancouver certified
-                  </p>
-                </form>
-              )}
+              <div className="bg-gray-800 p-6 rounded-xl">
+                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center mb-4">
+                  <CheckCircle2 className="w-6 h-6 text-gray-900" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">
+                  Clean Work Environment
+                </h3>
+                <p className="text-gray-300">
+                  We take care to minimize dust and debris, and thoroughly clean
+                  up after completing each project.
+                </p>
+              </div>
+
+              <div className="bg-gray-800 p-6 rounded-xl">
+                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center mb-4">
+                  <CheckCircle2 className="w-6 h-6 text-gray-900" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">
+                  Timely Project Completion
+                </h3>
+                <p className="text-gray-300">
+                  We respect your time and work efficiently to complete projects
+                  on schedule without compromising quality.
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -655,41 +382,6 @@ const DrywallPage: NextPage = () => {
         <Footer />
       </div>
     </>
-  );
-};
-
-const SuccessScreen = ({
-  email,
-  setShowSuccess,
-}: {
-  email: string;
-  setShowSuccess: (p: false) => void;
-}) => {
-  return (
-    <div className="p-8 flex flex-col items-center justify-center space-y-6 min-h-[400px]">
-      <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-4">
-        <Check className="w-8 h-8 text-green-500" />
-      </div>
-      <h3 className="text-2xl font-medium text-gray-900">Request received!</h3>
-
-      <div className="space-y-2 text-center">
-        <p className="text-gray-600">
-          We&apos;ll get back to you shortly with a quote
-        </p>
-        <p className="text-gray-500 text-sm">
-          A confirmation has been sent to {email}
-        </p>
-      </div>
-
-      <button
-        onClick={() => {
-          setShowSuccess(false);
-        }}
-        className="mt-8 bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-yellow-400 hover:text-black transition-colors"
-      >
-        Done
-      </button>
-    </div>
   );
 };
 

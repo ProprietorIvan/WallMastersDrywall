@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import type { NextPage } from "next";
+import SimpleContactForm from "@/components/SimpleContactForm";
 
 const CommercialDrywallPage: NextPage = () => {
   const commercialServices = [
@@ -228,7 +229,13 @@ const CommercialDrywallPage: NextPage = () => {
 
       {/* Contact Form */}
       <section id="contact" className="py-20 bg-gray-50">
-        <Contact />
+        <div className="max-w-xl mx-auto">
+          <SimpleContactForm
+            formTitle="Get a Free Commercial Drywall Quote"
+            serviceName="Commercial Drywall"
+            apiEndpoint="/api/drywall_email"
+          />
+        </div>
       </section>
 
       <Footer />

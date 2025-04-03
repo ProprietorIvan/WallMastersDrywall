@@ -6,6 +6,7 @@ import Contact from "@/components/Contact";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import type { NextPage } from "next";
+import SimpleContactForm from "@/components/SimpleContactForm";
 
 const DrywallInstallationPage: NextPage = () => {
   const installationServices = [
@@ -218,7 +219,13 @@ const DrywallInstallationPage: NextPage = () => {
 
       {/* Contact Form */}
       <section id="contact" className="py-20 bg-gray-50">
-        <Contact />
+        <div className="max-w-xl mx-auto">
+          <SimpleContactForm
+            formTitle="Get a Free Drywall Installation Quote"
+            serviceName="Drywall Installation"
+            apiEndpoint="/api/drywall_email"
+          />
+        </div>
       </section>
 
       <Footer />

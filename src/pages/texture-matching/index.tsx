@@ -6,6 +6,7 @@ import Contact from "@/components/Contact";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import type { NextPage } from "next";
+import SimpleContactForm from "@/components/SimpleContactForm";
 
 const TextureMatchingPage: NextPage = () => {
   const textureServices = [
@@ -216,7 +217,13 @@ const TextureMatchingPage: NextPage = () => {
 
       {/* Contact Form */}
       <section id="contact" className="py-20 bg-gray-50">
-        <Contact />
+        <div className="max-w-xl mx-auto">
+          <SimpleContactForm
+            formTitle="Get a Free Texture Matching Quote"
+            serviceName="Texture Matching"
+            apiEndpoint="/api/drywall_email"
+          />
+        </div>
       </section>
 
       <Footer />
