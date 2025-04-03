@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode, useCallback } from "react";
-import { Star, ChevronLeft, ChevronRight, Droplets } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 
 // Create a simple Card component instead of importing to avoid circular references
@@ -13,44 +13,41 @@ const TestimonialCard = ({ children, className }: TestimonialCardProps) => {
 };
 
 const Testimonials = () => {
-  const floodReviews = [
+  const drywallReviews = [
     {
-      name: "Sarah Johnson",
+      name: "Good people and fair price",
       role: "Vancouver Homeowner",
-      text: "After a pipe burst in my basement, Felicita Holdings responded within an hour. Their flood restoration team was professional, efficient, and saved us thousands in potential damage. Couldn't recommend them more highly!",
-      image: "/photos/reviews/1.jpg",
-      hasImage: true,
-    },
-    {
-      name: "Michael Chen",
-      role: "Commercial Property Manager",
-      text: "Managing multiple properties in Vancouver, I need reliable emergency flood services. Their 24/7 response team has saved us multiple times from serious water damage situations. Their thorough moisture detection and drying process is exceptional.",
-      image: "/photos/reviews/2.jpg",
-      hasImage: true,
-    },
-    {
-      name: "Emily Rodriguez",
-      role: "Restaurant Owner",
-      text: "When our restaurant kitchen flooded overnight, we feared the worst. Felicita's team arrived quickly, extracted all the water, and had industrial dryers set up within hours. They saved our business from closing for repairs!",
-      image: "/photos/reviews/3.jpg",
-      hasImage: true,
-    },
-    {
-      name: "Carlos Crespo",
-      role: "Verified Customer",
-      text: "Thank you Danny for doing a great job repairing the water damage and installing new drywall after our flooding incident. The whole experience was very pleasant, and I appreciate the team's responsiveness during such a stressful situation.",
+      text: "Good people and fair price. They patched several holes in our drywall and did an excellent job matching the texture. You can't even tell there was damage there. Highly recommend!",
       hasImage: false,
     },
     {
-      name: "Anmol Virk",
-      role: "Verified Customer",
-      text: "Very satisfied with their flood restoration service and quality of work. Danny is very knowledgeable about water damage issues and gives his honest opinion. Their flood cleanup was thorough and prices are very reasonable.",
+      name: "Best drywall repair Vancouver service",
+      role: "Commercial Property Owner",
+      text: "Best drywall repair Vancouver service I had in a while. The team was professional, showed up on time, and completed the office repairs with minimal disruption to our business. Quality work!",
       hasImage: false,
     },
     {
-      name: "Monty Gill",
+      name: "Best price for drywall repair",
+      role: "Residential Customer",
+      text: "Best price I got for drywall repair Vancouver. I got quotes from several companies and WallMasters offered the best value without compromising on quality. The finished walls look perfect!",
+      hasImage: false,
+    },
+    {
+      name: "Michael Thompson",
       role: "Verified Customer",
-      text: "Great emergency flood response and work ethic. They arrived quickly after our basement flooded, extracted all water efficiently, and prevented mold growth. Great prices and quality work!",
+      text: "I needed drywall installation for a home renovation project. The team at WallMasters was excellent from start to finish - clean, efficient, and the results exceeded my expectations.",
+      hasImage: false,
+    },
+    {
+      name: "Sarah Williams",
+      role: "Verified Customer",
+      text: "After water damage in our basement, WallMasters repaired all the damaged drywall and matched the texture perfectly. They were quick to respond and very professional throughout the process.",
+      hasImage: false,
+    },
+    {
+      name: "David Chen",
+      role: "Verified Customer",
+      text: "WallMasters did an amazing job installing new drywall in our home renovation. They were meticulous with details and finished on schedule. Would definitely use their services again!",
       hasImage: false,
     },
   ];
@@ -67,16 +64,16 @@ const Testimonials = () => {
   const handleNext = useCallback(() => {
     setCurrentIndex((prevIndex) => {
       const nextIndex = prevIndex + 1;
-      return nextIndex >= floodReviews.length - (reviewsToShow.desktop - 1)
+      return nextIndex >= drywallReviews.length - (reviewsToShow.desktop - 1)
         ? 0
         : nextIndex;
     });
-  }, [floodReviews.length, reviewsToShow.desktop]);
+  }, [drywallReviews.length, reviewsToShow.desktop]);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0
-        ? floodReviews.length - reviewsToShow.desktop
+        ? drywallReviews.length - reviewsToShow.desktop
         : prevIndex - 1
     );
     setIsAutoPlaying(false);
@@ -96,15 +93,15 @@ const Testimonials = () => {
   const reviewSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: "Felicita Holdings - Vancouver Flood Restoration",
+    name: "WallMasters Drywall Repair and New Installs - Vancouver",
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: "5.0",
-      reviewCount: "6",
+      reviewCount: "13",
       bestRating: "5",
       worstRating: "1",
     },
-    review: floodReviews.map((review) => ({
+    review: drywallReviews.map((review) => ({
       "@type": "Review",
       datePublished: new Date().toISOString().split("T")[0],
       reviewRating: {
@@ -123,19 +120,15 @@ const Testimonials = () => {
 
   return (
     <section className="py-16 px-5 bg-white relative overflow-hidden">
-      {/* Background water pattern */}
       <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
         <div className="absolute inset-0 bg-[url('/texture/noise.png')] opacity-8" />
-        <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/4">
-          <Droplets className="w-96 h-96 text-[#8B2635] opacity-10" />
-        </div>
       </div>
 
       <div className="max-w-7xl mx-auto relative">
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Customer Stories
+            Customer Reviews
           </h2>
           <div className="flex justify-center items-center gap-4 mb-8">
             <div className="h-px w-16 bg-yellow-400" />
@@ -165,7 +158,7 @@ const Testimonials = () => {
                 transition: "transform 2s ease-in-out",
               }}
             >
-              {floodReviews.map((review, index) => (
+              {drywallReviews.map((review, index) => (
                 <div
                   key={`${review.name}-${index}`}
                   className="w-full min-w-full md:w-1/2 md:min-w-[50%] lg:w-1/3 lg:min-w-[33.333%] px-4"
@@ -191,10 +184,10 @@ const Testimonials = () => {
 
                       {/* Reviewer Info */}
                       <div className="flex items-center">
-                        {review.hasImage && review.image ? (
+                        {review.hasImage ? (
                           <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4">
                             <Image
-                              src={review.image}
+                              src="/photos/reviews/placeholder.jpg"
                               alt={review.name}
                               width={48}
                               height={48}
@@ -240,7 +233,7 @@ const Testimonials = () => {
         {/* Google Review Link */}
         <div className="text-center mt-12">
           <a
-            href="https://g.co/kgs/MPxhuzL"
+            href="https://g.co/kgs/rUphS6g"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-black hover:text-gray-600 transition-colors"
@@ -249,13 +242,10 @@ const Testimonials = () => {
             <svg
               className="w-5 h-5"
               viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
+              <path d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0zm-1.78 16.546l-3.843-3.843 1.086-1.086 2.757 2.757 5.914-5.914 1.086 1.086-7 7z" />
             </svg>
           </a>
         </div>

@@ -1,87 +1,102 @@
-import React from 'react';
-import Head from 'next/head';
-import Navigation from '@/components/Navigation';
+import React from "react";
+import Head from "next/head";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import type { NextPage } from "next";
 
-const TermsAndConditions = () => {
+const TermsAndConditions: NextPage = () => {
   const sections = [
     {
       title: "Service Agreement",
-      content: `When engaging our services, you acknowledge and agree to the following terms:
+      content: `When engaging our drywall services, you acknowledge and agree to the following terms:
         • Service requests must be clearly defined in writing
-        • Pricing is determined based on scope of work
+        • Pricing is determined based on scope of work, material requirements, and labor
         • We reserve the right to adjust estimates if project scope changes
         • Emergency service rates apply outside regular business hours
-        • Minimum service charges may apply
-        • Cancellations require 24-hour notice to avoid charges`
+        • Minimum service charges may apply for small repairs
+        • Cancellations require 48-hour notice to avoid charges`,
     },
     {
       title: "Warranties & Guarantees",
-      content: `Our commitment to quality includes:
-        • 90-day warranty on workmanship
-        • Manufacturer warranties on installed products
+      content: `Our commitment to quality drywall services includes:
+        • 1-year warranty on workmanship for drywall installation and repairs
+        • Manufacturer warranties on all drywall materials
         • Satisfaction guarantee on completed work
         • Professional-grade materials and equipment
-        • Licensed and insured service providers
-        • Compliance with local building codes and regulations`
+        • Licensed and insured drywall specialists
+        • Compliance with local building codes and regulations`,
     },
     {
       title: "Payment Terms",
       content: `Our payment policies include:
-        • Deposits may be required for large projects
-        • Payment is due upon service completion
-        • We accept major credit cards and e-transfers
-        • Interest charges apply on overdue accounts
-        • Special financing available for major renovations
-        • Transparent pricing with no hidden fees`
+        • 25% deposit required for projects over $1,000
+        • Payment is due upon service completion for smaller jobs
+        • We accept major credit cards, e-transfers, and digital payments
+        • 2% interest charges per month on overdue accounts
+        • Special financing available for major commercial projects
+        • Transparent pricing with no hidden fees`,
     },
     {
       title: "Scheduling & Access",
-      content: `To ensure efficient service delivery:
+      content: `To ensure efficient drywall service delivery:
         • Provide clear access to work areas
-        • Secure permits when required
-        • Allow reasonable time for project completion
-        • Communicate special access requirements
+        • Secure permits when required for major renovations
+        • Allow reasonable time for project completion based on scope
+        • Furniture should be removed or centered in rooms when possible
         • Respect agreed-upon scheduling windows
-        • Notify us promptly of any scheduling conflicts`
+        • Notify us promptly of any scheduling conflicts`,
     },
     {
       title: "Property Protection",
       content: `We take extensive measures to protect your property:
         • Comprehensive insurance coverage
-        • Protective materials for floors and furniture
-        • Careful handling of personal property
+        • Protective coverings for floors, furniture, and fixtures
+        • Dust containment systems for larger drywall projects
         • Thorough cleanup after service completion
         • Documentation of pre-existing conditions
-        • Immediate reporting of any incidents`
+        • Immediate reporting of any incidents`,
     },
     {
-      title: "Service Limitations",
-      content: `Please note the following service limitations:
-        • Hazardous materials handling requires special arrangements
-        • Some repairs may require specialist contractors
-        • Weather conditions may affect outdoor services
-        • Access restrictions may limit service options
-        • Code compliance may restrict certain modifications
-        • Safety concerns may delay or prevent service`
-    }
+      title: "Material Selection",
+      content: `Our drywall material policies include:
+        • We use only high-quality, industry-standard drywall materials
+        • Special order materials may require additional lead time
+        • Custom texture matching available for existing surfaces
+        • Eco-friendly and low-VOC options available upon request
+        • Material substitutions may be necessary based on availability
+        • Samples provided for custom finishes and textures`,
+    },
   ];
 
   return (
     <>
       <Head>
-        <title>Terms & Conditions | A-Z Handyman - Felicita Holdings Ltd.</title>
-        <meta 
-          name="description" 
-          content="Our comprehensive terms and conditions outline our service agreements, warranties, and commitments to our customers. Read about our professional service standards." 
+        <title>Terms & Conditions | WallMasters Drywall Vancouver</title>
+        <meta
+          name="description"
+          content="Our comprehensive terms and conditions outline our drywall service agreements, warranties, and commitments to our customers. Read about our professional standards and service policies."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://drywallvan.ca/terms" />
+        <meta
+          property="og:title"
+          content="Terms & Conditions | WallMasters Drywall Vancouver"
+        />
+        <meta
+          property="og:description"
+          content="Our comprehensive terms and conditions outline our service agreements, warranties, and commitments."
         />
       </Head>
 
       <div className="min-h-screen bg-white">
-        <Navigation showActions={false} />
+        <Navigation />
 
-        <div className="max-w-7xl mx-auto px-4 pb-20">
+        <div className="max-w-7xl mx-auto px-4 pb-20 pt-24">
           {/* Header Section */}
-          <div className="text-center pt-20 mb-20">
+          <div className="text-center pt-12 mb-16">
             <h1 className="text-5xl font-bold mb-6">Terms & Conditions</h1>
             <div className="flex justify-center items-center gap-4 mb-8">
               <div className="h-px w-16 bg-yellow-400" />
@@ -89,19 +104,20 @@ const TermsAndConditions = () => {
               <div className="h-px w-16 bg-yellow-400" />
             </div>
             <p className="max-w-3xl mx-auto text-lg text-gray-700 leading-relaxed">
-              The following terms and conditions govern all services provided by Felicita Holdings Ltd., 
-              operating as A-Z Handyman. By engaging our services, you agree to these terms.
+              The following terms and conditions govern all drywall services
+              provided by WallMasters Drywall. By engaging our services, you
+              agree to these terms.
             </p>
           </div>
 
           {/* Terms Sections */}
           <div className="max-w-4xl mx-auto">
             {sections.map((section, index) => (
-              <div key={index} className="mb-16">
-                <div className="flex items-start gap-4 mb-6">
+              <div key={index} className="mb-12">
+                <div className="flex items-start gap-4 mb-4">
                   <div className="h-12 w-1 bg-yellow-400 mt-1" />
                   <div>
-                    <h2 className="text-3xl font-bold">{section.title}</h2>
+                    <h2 className="text-2xl font-bold">{section.title}</h2>
                   </div>
                 </div>
                 <div className="pl-5">
@@ -113,35 +129,48 @@ const TermsAndConditions = () => {
             ))}
 
             {/* Professional Standards Notice */}
-            <div className="bg-gray-50 p-8 rounded-lg mb-16">
-              <h2 className="text-3xl font-bold mb-6">Professional Standards</h2>
+            <div className="bg-gray-50 p-8 rounded-lg mb-12">
+              <h2 className="text-2xl font-bold mb-4">
+                Professional Standards
+              </h2>
               <p className="text-gray-600 mb-4">
-                A-Z Handyman maintains the highest professional standards in the industry. We are:
+                WallMasters Drywall maintains the highest professional standards
+                in the industry. We are:
               </p>
               <ul className="list-none space-y-3 text-gray-600">
-                <li>• Fully licensed and insured</li>
+                <li>• Fully licensed and insured drywall specialists</li>
                 <li>• WorkSafeBC compliant</li>
                 <li>• Committed to ongoing professional development</li>
                 <li>• Adherent to all local building codes and regulations</li>
                 <li>• Dedicated to exceptional customer service</li>
+                <li>• Experts in texture matching and seamless repairs</li>
               </ul>
             </div>
 
             {/* Contact Box */}
             <div className="bg-black text-white p-8 rounded-lg text-center">
-              <h2 className="text-2xl font-bold mb-4">Questions About Our Terms?</h2>
+              <h2 className="text-2xl font-bold mb-4">
+                Questions About Our Terms?
+              </h2>
               <p className="mb-6">
-                Our team is here to help clarify any aspects of our terms and conditions.
+                Our team is here to help clarify any aspects of our terms and
+                conditions.
               </p>
               <div className="space-y-2">
-                <p>Felicita Holdings Ltd. (d.b.a. A-Z Handyman)</p>
-                <p>1217 Howe St. Vancouver, BC V6Z 1R3</p>
+                <p>WallMasters Drywall</p>
+                <p>575 Drake St, Vancouver, BC V6B 4K8</p>
                 <div className="flex justify-center gap-8 mt-4">
-                  <a href="mailto:info@azhandyman.ca" className="text-yellow-400 hover:text-yellow-300">
-                    info@azhandyman.ca
+                  <a
+                    href="mailto:info@drywallvan.ca"
+                    className="text-yellow-400 hover:text-yellow-300"
+                  >
+                    info@drywallvan.ca
                   </a>
-                  <a href="tel:+17786534862" className="text-yellow-400 hover:text-yellow-300">
-                    +1 778-653-4862
+                  <a
+                    href="tel:+17789074485"
+                    className="text-yellow-400 hover:text-yellow-300"
+                  >
+                    +1 778-907-4485
                   </a>
                 </div>
               </div>
@@ -149,10 +178,17 @@ const TermsAndConditions = () => {
 
             {/* Last Updated */}
             <p className="text-sm text-gray-500 text-center mt-16">
-              Last Updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              Last Updated:{" "}
+              {new Date().toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
             </p>
           </div>
         </div>
+
+        <Footer />
       </div>
     </>
   );

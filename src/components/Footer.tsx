@@ -7,27 +7,22 @@ const Footer = () => {
   const organizationStructuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "A-Z Handyman",
-    url: "https://az-handyman.ca",
-    logo: "https://az-handyman.ca/logo.png",
-    parentOrganization: {
-      "@type": "Organization",
-      name: "Felicita Group",
-      url: "https://www.felicita.group",
-    },
+    name: "WallMasters Drywall",
+    url: "https://drywallvan.ca",
+    logo: "https://drywallvan.ca/logo.png",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "1205 Howe St.",
+      streetAddress: "575 Drake St",
       addressLocality: "Vancouver",
       addressRegion: "BC",
-      postalCode: "V6Z 1R3",
+      postalCode: "V6B 4K8",
       addressCountry: "CA",
     },
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+17786534862",
+      telephone: "+17789074485",
       contactType: "customer service",
-      email: "info@az-handyman.ca",
+      email: "info@drywallvan.ca",
       availableLanguage: ["English"],
     },
     openingHoursSpecification: {
@@ -66,16 +61,17 @@ const Footer = () => {
             {/* We are here to help Section */}
             <section aria-label="About Us">
               <h2 className="text-lg font-semibold mb-4">
-                We are here to help
+                Expert Drywall Solutions
               </h2>
               <div
                 className="h-1 w-12 bg-orange-600 mb-4"
                 aria-hidden="true"
               ></div>
               <p className="text-gray-300">
-                If you do not see the service you need, contact us. At A-Z
-                Handyman, no task is too big or small—we are ready to take on
-                new challenges and get the job done right.
+                From small repairs to complete installations, WallMasters
+                Drywall provides professional drywall services throughout
+                Vancouver. We pride ourselves on quality craftsmanship,
+                attention to detail, and customer satisfaction.
               </p>
             </section>
 
@@ -103,23 +99,23 @@ const Footer = () => {
                 aria-hidden="true"
               ></div>
               <address className="text-gray-300 space-y-2 not-italic">
-                <p>Address: 1217 Howe St. Vancouver BC</p>
+                <p>Address: 575 Drake St, Vancouver, BC V6B 4K8</p>
                 <p>
                   Phone:{" "}
                   <a
-                    href="tel:+17786534862"
+                    href="tel:+17789074485"
                     className="hover:text-white transition-colors"
                   >
-                    (778) 653-4862
+                    (778) 907-4485
                   </a>
                 </p>
                 <p>
                   Email:{" "}
                   <a
-                    href="mailto:info@azhandyman.ca"
+                    href="mailto:info@drywallvan.ca"
                     className="hover:text-white transition-colors"
                   >
-                    info@azhandyman.ca
+                    info@drywallvan.ca
                   </a>
                 </p>
               </address>
@@ -129,18 +125,11 @@ const Footer = () => {
           {/* Bottom Bar */}
           <div className="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-800">
             <div className="flex flex-col items-center text-gray-400 text-sm space-y-4">
-              <div className="text-xs tracking-wider text-gray-500">
-                <a
-                  href="https://www.felicita.group"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-normal hover:text-gray-300 transition-colors"
-                >
-                  Felicita Group Company
-                </a>
-              </div>
               <div className="flex flex-col md:flex-row justify-between items-center w-full">
-                <p>© {new Date().getFullYear()}. ALL RIGHTS RESERVED</p>
+                <p>
+                  © {new Date().getFullYear()} WallMasters Drywall. ALL RIGHTS
+                  RESERVED
+                </p>
                 <div className="flex space-x-8 mt-4 md:mt-0">
                   <Link
                     href="/privacy-policy"

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import {
   Phone,
   ArrowRight,
@@ -10,29 +11,32 @@ import {
   Building2,
   Home,
   Check,
+  Calendar,
 } from "lucide-react";
-import Contact from "@/components/Contact";
+import Head from "next/head";
 import Image from "next/image";
+import type { NextPage } from "next";
 import { Lead } from "@/utils/createLead";
 
 type CustomerType = "residential" | "commercial" | null;
+type ServiceType = "installation" | "texture" | "commercial" | null;
 
 interface FormData {
   name: string;
   phone: string;
-  facilityType: string;
-  projectSize: string;
-  urgency: string;
   email: string;
   address: string;
   projectDetails: string;
+  serviceType: string;
+  projectSize: string;
+  preferredDate: string;
 }
 
-const DrywallLandingPage = () => {
+const DrywallPage: NextPage = () => {
   const [customerType, setCustomerType] = useState<CustomerType>(null);
-  const [facilityType, setFacilityType] = useState("");
-  const [urgency, setUrgency] = useState("");
+  const [serviceType, setServiceType] = useState<ServiceType>(null);
   const [projectSize, setProjectSize] = useState("");
+  const [preferredDate, setPreferredDate] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [formData, setFormData] = useState<
     Pick<FormData, "name" | "phone" | "email" | "address" | "projectDetails">
@@ -62,10 +66,11 @@ const DrywallLandingPage = () => {
     const submissionData = {
       ...formData,
       customerType,
-      facilityType,
-      urgency,
+      serviceType,
       projectSize,
+      preferredDate,
     };
+
     try {
       const newLead: Lead = {
         name: formData.name,
@@ -73,15 +78,23 @@ const DrywallLandingPage = () => {
         lead_status: "New Lead",
         status_1_Mjj7KSmv:
           customerType === "commercial" ? "Commercial Form" : "Form Drywall",
-        text_Mjj7Hg3c: `project details: ${formData.projectDetails},urgency: ${urgency}, customer type: ${customerType}, facility type: ${facilityType}, project size:${projectSize}`,
+        text_Mjj7Hg3c: `project details: ${formData.projectDetails}, service type: ${serviceType}, customer type: ${customerType}, project size: ${projectSize}, preferred date: ${preferredDate}`,
         numbers_Mjj7fpib: 0,
         job_location_mkm418ra: formData.address,
         lead_phone: formData.phone,
         lead_email: formData.email,
-        status_1_Mjj77YUc: "Drywall Repair",
+        status_1_Mjj77YUc:
+          serviceType === "installation"
+            ? "Drywall Repair"
+            : serviceType === "texture"
+            ? "Drywall Repair"
+            : serviceType === "commercial"
+            ? "Handyman"
+            : "Drywall Repair",
         status_1_Mjj7Dz0C: "No Payment Due",
         status_1_Mjj7nPIN: "Not Insurance",
       };
+
       fetch("/api/monday", {
         method: "POST",
         headers: {
@@ -92,8 +105,8 @@ const DrywallLandingPage = () => {
     } catch (e) {
       console.warn(e);
     }
+
     try {
-      // You can replace this with your actual API endpoint
       const response = await fetch("/api/drywall_email", {
         method: "POST",
         headers: {
@@ -113,9 +126,9 @@ const DrywallLandingPage = () => {
           projectDetails: "",
         });
         setCustomerType(null);
-        setFacilityType("");
-        setUrgency("");
+        setServiceType(null);
         setProjectSize("");
+        setPreferredDate("");
       } else {
         throw new Error("Failed to submit quote request");
       }
@@ -126,19 +139,14 @@ const DrywallLandingPage = () => {
   };
 
   const handleEmergencyCall = () => {
-    window.location.href = "tel:+1 (778) 653-4862"; // Replace with your phone number
-
-    const yourhome = document.querySelector("#contactform");
-    if (yourhome) {
-      yourhome.scrollIntoView({ behavior: "smooth", inline: "nearest" });
-    }
+    window.location.href = "tel:+17789074485";
   };
 
   const serviceFeatures = [
     {
       icon: <Building2 className="w-6 h-6" />,
       title: "Vancouver Experts",
-      description: "Your local drywall repair specialists",
+      description: "Your local drywall installation specialists",
     },
     {
       icon: <Ruler className="w-6 h-6" />,
@@ -147,533 +155,506 @@ const DrywallLandingPage = () => {
     },
     {
       icon: <Clock className="w-6 h-6" />,
-      title: "Fast Response",
-      description: "2-hour response time guaranteed",
+      title: "On-Time Delivery",
+      description: "Projects completed on schedule",
     },
     {
       icon: <Shield className="w-6 h-6" />,
-      title: "Certified Results",
+      title: "Certified Professionals",
       description: "Licensed and insured in Vancouver",
     },
   ];
 
-  const serviceTypes = [
+  const services = [
     {
-      title: "Wall Repair",
-      points: [
-        "Water damage restoration",
-        "Hole patching",
-        "Crack repair",
-        "Surface finishing",
+      id: "installation",
+      title: "NEW DRYWALL INSTALLATION",
+      description:
+        "Transform your space with expert drywall installation services. Whether you're renovating, building an addition, or constructing a new property, our team delivers exceptional quality from framing to finishing.",
+      image: "/photos/homepage/1.jpg",
+      features: [
+        "Complete new installations",
+        "Home renovations and additions",
+        "Custom designs and layouts",
+        "Premium material options",
       ],
     },
     {
-      title: "Commercial Services",
-      points: [
-        "Office renovations",
-        "Retail space repairs",
-        "Industrial solutions",
-        "Multi-unit projects",
+      id: "texture",
+      title: "TEXTURE MATCHING",
+      description:
+        "Our skilled technicians are experts at creating and matching any wall texture. We perfectly blend new work with your existing surfaces for seamless, consistent finishes that enhance your space.",
+      image: "/photos/homepage/BeforeAfter.jpg",
+      features: [
+        "Perfect texture matching",
+        "Knockdown, orange peel, and popcorn textures",
+        "Custom texture creation",
+        "Whole-home texture refreshing",
       ],
     },
     {
-      title: "Expert Finishing",
-      points: [
-        "Texture matching",
-        "Paint blending",
-        "Seamless repairs",
-        "Premium materials",
+      id: "commercial",
+      title: "COMMERCIAL DRYWALL",
+      description:
+        "Specialized drywall solutions for businesses of all sizes. Our commercial services include installations for office spaces, retail locations, restaurants, and more with minimal disruption to your operations.",
+      image: "/photos/homepage/Handyman.jpg",
+      features: [
+        "Office and retail buildouts",
+        "Fire-rated assemblies",
+        "Acoustic solutions",
+        "After-hours installation options",
       ],
     },
-    {
-      title: "Additional Services",
-      points: [
-        "Ceiling repairs",
-        "Corner bead installation",
-        "Sound insulation",
-        "Complete remodels",
-      ],
-    },
-  ];
-
-  const facilityTypes = [
-    "Office Building",
-    "Retail Store",
-    "Restaurant",
-    "Warehouse",
-    "Medical Facility",
-    "Educational Institution",
-    "Hotel/Hospitality",
-    "Industrial Space",
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navigation transparent />
+    <>
+      <Head>
+        <title>
+          Expert Drywall Services Vancouver | Installation, Texture Matching &
+          Commercial
+        </title>
+        <meta
+          name="description"
+          content="Vancouver's premier drywall specialists offering new installations, expert texture matching, and commercial drywall solutions. Free quotes and superior craftsmanship."
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-      {/* Hero Section */}
-      <section className="relative pt-20 bg-gradient-to-b from-gray-50 to-white">
-        <div className="absolute inset-0 bg-grid-gray-100 bg-[size:32px_32px] [mask-image:linear-gradient(to_bottom,white,transparent)]" />
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://drywallvan.ca/drywall" />
+        <meta
+          property="og:title"
+          content="Expert Drywall Services Vancouver | Installation, Texture Matching & Commercial"
+        />
+        <meta
+          property="og:description"
+          content="Vancouver's premier drywall specialists offering new installations, expert texture matching, and commercial drywall solutions."
+        />
+        <meta
+          property="og:image"
+          content="https://drywallvan.ca/photos/homepage/1.jpg"
+        />
+      </Head>
 
-        <div className="max-w-7xl mx-auto px-4 relative">
-          <div className="flex flex-col md:flex-row gap-12 items-center py-16">
-            <div className="w-full md:w-1/2">
-              <div className="inline-block bg-gray-900 text-white px-4 py-1 rounded-full text-sm font-medium mb-6">
-                Vancouver&apos;s Premier Drywall Experts
+      <div className="min-h-screen bg-white">
+        <Navigation />
+
+        {/* Hero Section */}
+        <section className="relative pt-24 bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+          <div className="max-w-7xl mx-auto px-4 relative">
+            <div className="flex flex-col md:flex-row gap-12 items-center py-16">
+              <div className="w-full md:w-1/2">
+                <div className="inline-block bg-yellow-400 text-gray-900 px-4 py-1 rounded-full text-sm font-medium mb-6">
+                  Vancouver&apos;s Premier Drywall Specialists
+                </div>
+                <h1 className="text-5xl md:text-6xl font-bold mb-6">
+                  Expert Drywall{" "}
+                  <span className="text-yellow-400">Installation</span> &{" "}
+                  <span className="text-yellow-400">Finishing</span>
+                </h1>
+                <p className="text-xl text-gray-200 mb-8 leading-relaxed">
+                  From new installations to perfect texture matching and
+                  commercial solutions, WallMasters delivers flawless results
+                  for all your drywall needs.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    onClick={handleEmergencyCall}
+                    className="group inline-flex items-center justify-center gap-3 bg-yellow-400 text-gray-900 px-8 py-4 rounded-full text-lg font-medium hover:bg-yellow-300 transition-all duration-300"
+                  >
+                    <Phone className="w-6 h-6" />
+                    <span>Call (778) 907-4485</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      const contactForm =
+                        document.querySelector("#contactform");
+                      if (contactForm) {
+                        contactForm.scrollIntoView({ behavior: "smooth" });
+                      }
+                    }}
+                    className="group inline-flex items-center justify-center gap-3 bg-transparent border-2 border-white text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-white/10 transition-all duration-300"
+                  >
+                    <span>Get Free Estimate</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
               </div>
-              <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gray-900">
-                Expert drywall repair.
-                <span className="block text-gray-900">Flawless results.</span>
-              </h1>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                Vancouver&apos;s trusted drywall repair specialists for homes
-                and businesses. From small patches to complete renovations.
+
+              <div className="w-full md:w-1/2">
+                <div className="relative h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl">
+                  <Image
+                    src="/photos/homepage/1.jpg"
+                    alt="Professional Drywall Installation Vancouver"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Services Section */}
+        <section className="py-20 bg-white" id="services">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold mb-4 text-gray-900">
+                Our Specialized Drywall Services
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Delivering exceptional quality and craftsmanship for your
+                residential and commercial drywall projects
               </p>
-
-              <button
-                onClick={handleEmergencyCall}
-                className="group inline-flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-gray-800 transition-all duration-300"
-              >
-                <Phone className="w-6 h-6" />
-                <span>Get Started Now</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
             </div>
 
-            <div className="w-full md:w-1/2">
-              <div className="relative h-[600px] w-full">
-                <Image
-                  src="/photos/homepage/2.jpg"
-                  alt="Vancouver Professional Drywall"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover rounded-xl"
-                  priority
-                />
-                <div className="absolute inset-0 rounded-xl ring-1 ring-black/10" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">
-              Premium Drywall Services
-            </h2>
-            <p className="text-lg text-gray-600">
-              Vancouver&apos;s most trusted repair specialists
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {serviceFeatures.map((feature, index) => (
-              <div
-                key={index}
-                className="bg-gray-50 p-6 rounded-xl hover:shadow-lg transition-shadow duration-300"
-              >
-                <div className="text-gray-900 mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Services Grid */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">
-              Our Services
-            </h2>
-            <p className="text-lg text-gray-600">
-              Comprehensive drywall solutions for Vancouver properties
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {serviceTypes.map((type, index) => (
-              <div
-                key={index}
-                className="bg-white p-8 rounded-xl hover:shadow-lg transition-shadow duration-300"
-              >
-                <h3 className="text-2xl font-bold mb-4 text-gray-900">
-                  {type.title}
-                </h3>
-                <ul className="space-y-3">
-                  {type.points.map((point, pointIndex) => (
-                    <li key={pointIndex} className="flex items-center gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gray-900" />
-                      <span className="text-gray-600">{point}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Form Section */}
-
-      <section className="py-20 bg-white" id="contactform">
-        <div className="max-w-3xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
-              Request a Quote
-            </h2>
-            <p className="text-lg text-gray-600">
-              2-hour response • Vancouver-wide service
-            </p>
-          </div>
-
-          <div className="bg-gray-50 rounded-2xl shadow-lg p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Property Type Selection */}
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                <button
-                  type="button"
-                  onClick={() => setCustomerType("residential")}
-                  className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                    customerType === "residential"
-                      ? "border-gray-900 bg-gray-900/5"
-                      : "border-gray-200 hover:border-gray-900"
-                  }`}
+            <div className="space-y-20">
+              {services.map((service, index) => (
+                <div
+                  key={service.id}
+                  className={`flex flex-col ${
+                    index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                  } gap-8 items-center`}
                 >
-                  <div className="flex items-center gap-3">
-                    <Home
-                      className={`w-5 h-5 ${
-                        customerType === "residential"
-                          ? "text-gray-900"
-                          : "text-gray-600"
-                      }`}
-                    />
-                    <div>
-                      <h3
-                        className={`text-lg font-semibold mb-1 ${
-                          customerType === "residential"
-                            ? "text-gray-900"
-                            : "text-gray-900"
-                        }`}
-                      >
-                        Residential
-                      </h3>
-                      <p className="text-sm text-gray-600">Home repairs</p>
+                  <div className="w-full md:w-1/2">
+                    <div className="relative h-[400px] w-full rounded-xl overflow-hidden shadow-lg">
+                      <Image
+                        src={service.image}
+                        alt={service.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover"
+                      />
                     </div>
                   </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setCustomerType("commercial")}
-                  className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                    customerType === "commercial"
-                      ? "border-gray-900 bg-gray-900/5"
-                      : "border-gray-200 hover:border-gray-900"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Building2
-                      className={`w-5 h-5 ${
-                        customerType === "commercial"
-                          ? "text-gray-900"
-                          : "text-gray-600"
-                      }`}
-                    />
-                    <div>
-                      <h3
-                        className={`text-lg font-semibold mb-1 ${
-                          customerType === "commercial"
-                            ? "text-gray-900"
-                            : "text-gray-900"
-                        }`}
-                      >
-                        Commercial
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Business solutions
-                      </p>
-                    </div>
-                  </div>
-                </button>
-              </div>
-
-              {/* Contact Form */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Phone *
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                    required
-                  />
-                </div>
-              </div>
-
-              {customerType === "commercial" && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Facility Type *
-                    </label>
-                    <select
-                      name="facilityType"
-                      value={facilityType}
-                      onChange={(e) => {
-                        setFacilityType(e.target.value);
-                        handleInputChange(e);
-                      }}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                      required
-                    >
-                      <option value="">Select facility type</option>
-                      {facilityTypes.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
-                        </option>
+                  <div className="w-full md:w-1/2">
+                    <h3 className="text-3xl font-bold mb-4 text-gray-900">
+                      {service.title}
+                    </h3>
+                    <p className="text-lg text-gray-600 mb-6">
+                      {service.description}
+                    </p>
+                    <ul className="space-y-3 mb-8">
+                      {service.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-start gap-3">
+                          <CheckCircle2 className="w-5 h-5 text-green-500 mt-1 flex-shrink-0" />
+                          <span className="text-gray-700">{feature}</span>
+                        </li>
                       ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Project Size (sq ft) *
-                    </label>
-                    <input
-                      type="number"
-                      name="projectSize"
-                      value={projectSize}
-                      onChange={(e) => {
-                        setProjectSize(e.target.value);
-                        handleInputChange(e);
+                    </ul>
+                    <button
+                      onClick={() => {
+                        setServiceType(service.id as ServiceType);
+                        const contactForm =
+                          document.querySelector("#contactform");
+                        if (contactForm) {
+                          contactForm.scrollIntoView({ behavior: "smooth" });
+                        }
                       }}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                      placeholder="Enter approximate square footage"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Urgency *
-                    </label>
-                    <select
-                      name="urgency"
-                      value={urgency}
-                      onChange={(e) => {
-                        setUrgency(e.target.value);
-                        handleInputChange(e);
-                      }}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                      required
+                      className="inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
                     >
-                      <option value="">Select urgency level</option>
-                      <option value="emergency">
-                        Emergency (Need immediate attention)
-                      </option>
-                      <option value="urgent">Urgent (Within 24 hours)</option>
-                      <option value="standard">Standard (Within a week)</option>
-                      <option value="planned">
-                        Planned Project (Flexible timing)
-                      </option>
-                    </select>
+                      <span>Request a Quote</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
                   </div>
-                </>
-              )}
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Email *
-                </label>
-                <input
-                  type="text"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  required
-                />
-              </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Property Address *
-                </label>
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  required
-                />
-              </div>
+        {/* Features Grid */}
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold mb-4 text-gray-900">
+                Why Choose WallMasters Drywall
+              </h2>
+              <p className="text-lg text-gray-600">
+                Vancouver&apos;s most trusted drywall specialists
+              </p>
+            </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Project Details
-                </label>
-                <textarea
-                  name="projectDetails"
-                  value={formData.projectDetails}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="Please describe your project requirements..."
-                ></textarea>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {serviceFeatures.map((feature, index) => (
+                <div
+                  key={index}
+                  className="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300"
+                >
+                  <div className="text-yellow-500 mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600">{feature.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Form Section */}
+        <section className="py-20 bg-white" id="contactform">
+          <div className="max-w-5xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+                Schedule Your Drywall Service
+              </h2>
+              <p className="text-lg text-gray-600">
+                Get a free estimate for your project
+              </p>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl shadow-lg p-8">
               {showSuccess ? (
                 <SuccessScreen
                   email={formData.email}
                   setShowSuccess={setShowSuccess}
                 />
               ) : (
-                <button
-                  type="submit"
-                  className="w-full bg-gray-900 text-white py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors duration-300"
-                >
-                  Submit Quote Request
-                </button>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Service Type Selection */}
+                  <div className="mb-8">
+                    <label className="block text-lg font-medium text-gray-900 mb-4">
+                      Select Service Type *
+                    </label>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {services.map((service) => (
+                        <button
+                          key={service.id}
+                          type="button"
+                          onClick={() =>
+                            setServiceType(service.id as ServiceType)
+                          }
+                          className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                            serviceType === service.id
+                              ? "border-gray-900 bg-gray-900/5"
+                              : "border-gray-200 hover:border-gray-400"
+                          }`}
+                        >
+                          <h3
+                            className={`text-lg font-semibold mb-1 ${
+                              serviceType === service.id
+                                ? "text-gray-900"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            {service.id === "installation"
+                              ? "NEW"
+                              : service.id === "texture"
+                              ? "TEXTURE"
+                              : service.id === "commercial"
+                              ? "COMMERCIAL"
+                              : service.title}
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            {service.features[0]}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Property Type Selection */}
+                  <div className="mb-8">
+                    <label className="block text-lg font-medium text-gray-900 mb-4">
+                      Property Type *
+                    </label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <button
+                        type="button"
+                        onClick={() => setCustomerType("residential")}
+                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                          customerType === "residential"
+                            ? "border-gray-900 bg-gray-900/5"
+                            : "border-gray-200 hover:border-gray-400"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <Home
+                            className={`w-5 h-5 ${
+                              customerType === "residential"
+                                ? "text-gray-900"
+                                : "text-gray-600"
+                            }`}
+                          />
+                          <div>
+                            <h3
+                              className={`text-lg font-semibold mb-1 ${
+                                customerType === "residential"
+                                  ? "text-gray-900"
+                                  : "text-gray-700"
+                              }`}
+                            >
+                              Residential
+                            </h3>
+                            <p className="text-sm text-gray-600">
+                              Home projects
+                            </p>
+                          </div>
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setCustomerType("commercial")}
+                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                          customerType === "commercial"
+                            ? "border-gray-900 bg-gray-900/5"
+                            : "border-gray-200 hover:border-gray-400"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <Building2
+                            className={`w-5 h-5 ${
+                              customerType === "commercial"
+                                ? "text-gray-900"
+                                : "text-gray-600"
+                            }`}
+                          />
+                          <div>
+                            <h3
+                              className={`text-lg font-semibold mb-1 ${
+                                customerType === "commercial"
+                                  ? "text-gray-900"
+                                  : "text-gray-700"
+                              }`}
+                            >
+                              Commercial
+                            </h3>
+                            <p className="text-sm text-gray-600">
+                              Business solutions
+                            </p>
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Contact Form */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-900 mb-2">
+                        Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-900 mb-2">
+                        Phone *
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Email *
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Property Address *
+                    </label>
+                    <input
+                      type="text"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Project Size (sq ft)
+                    </label>
+                    <input
+                      type="number"
+                      value={projectSize}
+                      onChange={(e) => setProjectSize(e.target.value)}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                      placeholder="Approximate square footage"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Preferred Start Date
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="date"
+                        value={preferredDate}
+                        onChange={(e) => setPreferredDate(e.target.value)}
+                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                      />
+                      <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Project Details
+                    </label>
+                    <textarea
+                      name="projectDetails"
+                      value={formData.projectDetails}
+                      onChange={handleInputChange}
+                      rows={4}
+                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                      placeholder="Please describe your drywall project needs..."
+                    ></textarea>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full bg-gray-900 text-white py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors duration-300"
+                  >
+                    Submit Request
+                  </button>
+
+                  <p className="text-sm text-gray-600 text-center">
+                    Fast response • Expert service • Vancouver certified
+                  </p>
+                </form>
               )}
-              <p className="text-sm text-gray-600 text-center">
-                2-hour response • Expert service • Vancouver certified
-              </p>
-            </form>
-          </div>
-        </div>
-        <Contact />
-      </section>
-
-      {/* Results Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold mb-6 text-gray-900">
-                Proven Excellence
-              </h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Our certified team delivers comprehensive drywall solutions,
-                transforming Vancouver properties with precision and expertise.
-              </p>
-              <ul className="space-y-4">
-                {[
-                  "Professional damage assessment",
-                  "BC-certified processes",
-                  "Premium materials",
-                  "Satisfaction guaranteed",
-                ].map((item, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gray-900" />
-                    <span className="text-gray-600 font-medium">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="relative h-[500px]">
-              <Image
-                src="/photos/homepage/1.jpg"
-                alt="Vancouver Drywall Excellence"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover rounded-xl"
-                priority
-              />
-              <div className="absolute inset-0 rounded-xl ring-1 ring-black/10" />
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* FAQ Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">
-              Common Questions
-            </h2>
-            <p className="text-lg text-gray-600">
-              Everything you need to know about our drywall services
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            {[
-              {
-                question: "How quickly can you respond to emergency repairs?",
-                answer:
-                  "We guarantee a 2-hour response time for emergency services across Vancouver. Our team is available 24/7 to handle urgent drywall repairs.",
-              },
-              {
-                question:
-                  "Do you handle both residential and commercial projects?",
-                answer:
-                  "Yes, we specialize in both residential and commercial drywall services. From small home repairs to large-scale commercial renovations, our team has the expertise to handle any project size.",
-              },
-              {
-                question: "Are you licensed and insured?",
-                answer:
-                  "Absolutely. We are fully licensed and insured in Vancouver, providing you complete peace of mind for any drywall project we undertake.",
-              },
-              {
-                question: "What types of drywall services do you offer?",
-                answer:
-                  "We offer a comprehensive range of services including water damage repair, hole patching, crack repair, texture matching, complete wall installations, and professional finishing.",
-              },
-            ].map((faq, index) => (
-              <div key={index} className="bg-white p-6 rounded-xl">
-                <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                  {faq.question}
-                </h3>
-                <p className="text-gray-600">{faq.answer}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA Section */}
-      <section className="py-16 bg-gray-900">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-            Vancouver&apos;s Trusted Drywall Experts
-          </h2>
-          <p className="text-xl mb-8 text-gray-300">
-            Professional drywall services across Greater Vancouver
-          </p>
-          <button
-            onClick={handleEmergencyCall}
-            className="group inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-full text-xl font-bold hover:bg-gray-100 transition-all duration-300"
-          >
-            <Phone className="w-6 h-6" />
-            <span>Get Started Now</span>
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
-      </section>
-    </div>
+        <Footer />
+      </div>
+    </>
   );
 };
 
@@ -689,12 +670,14 @@ const SuccessScreen = ({
       <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-4">
         <Check className="w-8 h-8 text-green-500" />
       </div>
-      <h3 className="text-2xl font-medium text-gray-900">Message received</h3>
+      <h3 className="text-2xl font-medium text-gray-900">Request received!</h3>
 
       <div className="space-y-2 text-center">
-        <p className="text-gray-600">We&apos;ll get back to you shortly</p>
+        <p className="text-gray-600">
+          We&apos;ll get back to you shortly with a quote
+        </p>
         <p className="text-gray-500 text-sm">
-          Response will be sent to your email
+          A confirmation has been sent to {email}
         </p>
       </div>
 
@@ -702,7 +685,7 @@ const SuccessScreen = ({
         onClick={() => {
           setShowSuccess(false);
         }}
-        className="mt-8 bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-[#ffc527] hover:text-black"
+        className="mt-8 bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-yellow-400 hover:text-black transition-colors"
       >
         Done
       </button>
@@ -710,4 +693,4 @@ const SuccessScreen = ({
   );
 };
 
-export default DrywallLandingPage;
+export default DrywallPage;
