@@ -98,7 +98,7 @@ const Navigation = ({
 
   const navClasses = `
     w-full z-50 transition-all duration-300
-    bg-white px-0 py-0
+    bg-white
     ${!isHomepage && isScrolled ? "shadow-lg" : ""}
   `;
 
@@ -179,15 +179,15 @@ const Navigation = ({
       </div>
 
       {/* Desktop Navigation */}
-      <div className="hidden lg:block max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-24">
+      <div className="hidden lg:block max-w-7xl mx-auto px-4 py-2">
+        <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center">
-            <div className="relative h-16 w-48">
+            <div className="relative h-14 w-44">
               <Image
                 src="/logo.png"
                 alt="WallMasters Drywall Vancouver"
                 fill
-                sizes="192px"
+                sizes="176px"
                 className="object-contain"
                 priority
               />

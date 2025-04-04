@@ -4,13 +4,15 @@ const SITE_URL = "https://drywallvan.ca";
 
 const pages = [
   { url: "/", changefreq: "weekly", priority: 1.0 },
-  { url: "/contact", changefreq: "monthly", priority: 0.8 },
   { url: "/drywall", changefreq: "weekly", priority: 0.9 },
+  { url: "/services", changefreq: "weekly", priority: 0.9 },
   { url: "/drywall-repair", changefreq: "weekly", priority: 0.9 },
   { url: "/drywall-installation", changefreq: "weekly", priority: 0.9 },
   { url: "/texture-matching", changefreq: "weekly", priority: 0.9 },
   { url: "/commercial-drywall", changefreq: "weekly", priority: 0.9 },
   { url: "/burnaby-drywall", changefreq: "weekly", priority: 0.8 },
+  { url: "/why-chose-us", changefreq: "monthly", priority: 0.8 },
+  { url: "/contact", changefreq: "monthly", priority: 0.8 },
   { url: "/privacy-policy", changefreq: "yearly", priority: 0.3 },
   { url: "/terms", changefreq: "yearly", priority: 0.3 },
 ];
@@ -24,6 +26,7 @@ const createSitemap = () => `<?xml version="1.0" encoding="UTF-8"?>
       <loc>${SITE_URL}${url}</loc>
       <changefreq>${changefreq}</changefreq>
       <priority>${priority}</priority>
+      <lastmod>${new Date().toISOString().split("T")[0]}</lastmod>
     </url>
   `
     )
