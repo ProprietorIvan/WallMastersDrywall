@@ -620,23 +620,25 @@ export default TextureMatchingPage;
 
 const SuccessScreen = ({ onDismiss }: { onDismiss: () => void }) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg p-8 max-w-md w-full">
-        <div className="flex flex-col items-center text-center">
-          <CheckCircle2 className="w-16 h-16 text-green-500 mb-4" />
-          <h3 className="text-2xl font-bold mb-2">Message Received!</h3>
-          <p className="text-gray-600 mb-6">
-            Thank you for contacting Wall Masters Drywall. We&apos;ll get back
-            to you shortly about your texture matching project.
-          </p>
-          <button
-            onClick={onDismiss}
-            className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
-          >
-            Close
-          </button>
-        </div>
+    <div className="p-8 flex flex-col items-center justify-center space-y-6 min-h-[400px] bg-white rounded-lg shadow-lg">
+      <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-4">
+        <Check className="w-8 h-8 text-green-500" />
       </div>
+      <h3 className="text-2xl font-medium text-gray-900">Message received</h3>
+
+      <div className="space-y-2 text-center">
+        <p className="text-gray-600">We&apos;ll get back to you shortly</p>
+        <p className="text-gray-500 text-sm">
+          Response will be sent to your email
+        </p>
+      </div>
+
+      <button
+        onClick={onDismiss}
+        className="mt-8 bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-[#ffc527] hover:text-black"
+      >
+        Done
+      </button>
     </div>
   );
 };

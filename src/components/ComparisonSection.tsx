@@ -110,7 +110,7 @@ const ComparisonSection = () => {
                 quality={85}
               />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/40 group-hover:to-black/60 transition-all duration-300" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30 group-hover:to-black/50 transition-all duration-300" />
             <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
               <h3 className="text-xl font-bold mb-1">{service.title}</h3>
               <p className="text-sm opacity-90">
