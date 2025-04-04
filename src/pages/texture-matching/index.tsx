@@ -434,180 +434,173 @@ const TextureMatchingPage: NextPage = () => {
 
       {/* Contact Form */}
       <section id="contact" className="py-20 bg-gray-50">
-        <div className="max-w-xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            Get a Free Texture Matching Quote
-          </h2>
-          <p className="text-center mb-8">
-            Fill out the form below to get started with your texture matching
-            project. Our team will get back to you shortly with a free,
-            no-obligation quote.
-          </p>
-          {showSuccess ? (
-            <SuccessScreen onDismiss={() => setShowSuccess(false)} />
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label htmlFor="name" className="block mb-2">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full p-2 border rounded-lg"
-                />
+        <div className="max-w-3xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
+              Request a Quote
+            </h2>
+            <p className="text-lg text-gray-600">
+              2-hour response • Vancouver-wide service
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-2xl shadow-lg p-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Property Type Selection */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <button
+                  type="button"
+                  onClick={() => setCustomerType("residential")}
+                  className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                    customerType === "residential"
+                      ? "border-gray-900 bg-gray-900/5"
+                      : "border-gray-200 hover:border-gray-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <HomeIcon
+                      className={`w-5 h-5 ${
+                        customerType === "residential"
+                          ? "text-gray-900"
+                          : "text-gray-600"
+                      }`}
+                    />
+                    <div>
+                      <h3
+                        className={`text-lg font-semibold mb-1 ${
+                          customerType === "residential"
+                            ? "text-gray-900"
+                            : "text-gray-900"
+                        }`}
+                      >
+                        Residential
+                      </h3>
+                      <p className="text-sm text-gray-600">Home repairs</p>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setCustomerType("commercial")}
+                  className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                    customerType === "commercial"
+                      ? "border-gray-900 bg-gray-900/5"
+                      : "border-gray-200 hover:border-gray-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Building2
+                      className={`w-5 h-5 ${
+                        customerType === "commercial"
+                          ? "text-gray-900"
+                          : "text-gray-600"
+                      }`}
+                    />
+                    <div>
+                      <h3
+                        className={`text-lg font-semibold mb-1 ${
+                          customerType === "commercial"
+                            ? "text-gray-900"
+                            : "text-gray-900"
+                        }`}
+                      >
+                        Commercial
+                      </h3>
+                      <p className="text-sm text-gray-600">Business projects</p>
+                    </div>
+                  </div>
+                </button>
               </div>
-              <div className="mb-4">
-                <label htmlFor="phone" className="block mb-2">
-                  Phone
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full p-2 border rounded-lg"
-                />
+
+              {/* Contact Details */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    Phone *
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                    required
+                  />
+                </div>
               </div>
-              <div className="mb-4">
-                <label htmlFor="email" className="block mb-2">
-                  Email
+
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Email *
                 </label>
                 <input
                   type="email"
-                  id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                   required
-                  className="w-full p-2 border rounded-lg"
                 />
               </div>
-              <div className="mb-4">
-                <label htmlFor="address" className="block mb-2">
-                  Address
-                </label>
-                <textarea
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full p-2 border rounded-lg"
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="projectDetails" className="block mb-2">
-                  Project Details
-                </label>
-                <textarea
-                  id="projectDetails"
-                  name="projectDetails"
-                  value={formData.projectDetails}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full p-2 border rounded-lg"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block mb-2">Customer Type</label>
-                <div className="flex space-x-4">
-                  <button
-                    type="button"
-                    className={`flex-1 py-2 px-4 rounded-lg border ${
-                      customerType === "residential"
-                        ? "bg-black text-white"
-                        : "bg-white text-black"
-                    }`}
-                    onClick={() => setCustomerType("residential")}
-                  >
-                    <HomeIcon className="w-5 h-5 inline mr-2" />
-                    Residential
-                  </button>
-                  <button
-                    type="button"
-                    className={`flex-1 py-2 px-4 rounded-lg border ${
-                      customerType === "commercial"
-                        ? "bg-black text-white"
-                        : "bg-white text-black"
-                    }`}
-                    onClick={() => setCustomerType("commercial")}
-                  >
-                    <Building2 className="w-5 h-5 inline mr-2" />
-                    Commercial
-                  </button>
-                </div>
-              </div>
-              {customerType === "commercial" && (
-                <div className="mb-4">
-                  <label htmlFor="facilityType" className="block mb-2">
-                    Facility Type
-                  </label>
-                  <select
-                    id="facilityType"
-                    name="facilityType"
-                    value={facilityType}
-                    onChange={(e) => setFacilityType(e.target.value)}
-                    required
-                    className="w-full p-2 border rounded-lg"
-                  >
-                    <option value="">Select facility type</option>
-                    {facilityTypes.map((type) => (
-                      <option key={type} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-              <div className="mb-4">
-                <label htmlFor="urgency" className="block mb-2">
-                  How urgent is your project?
-                </label>
-                <select
-                  id="urgency"
-                  name="urgency"
-                  value={urgency}
-                  onChange={(e) => setUrgency(e.target.value)}
-                  required
-                  className="w-full p-2 border rounded-lg"
-                >
-                  <option value="">Select urgency</option>
-                  <option value="Immediate">Immediate</option>
-                  <option value="Within 1 week">Within 1 week</option>
-                  <option value="Within 2 weeks">Within 2 weeks</option>
-                  <option value="Within 1 month">Within 1 month</option>
-                </select>
-              </div>
-              <div className="mb-6">
-                <label htmlFor="projectSize" className="block mb-2">
-                  Project Size (approx. sq. ft.)
+
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Property Address *
                 </label>
                 <input
                   type="text"
-                  id="projectSize"
-                  name="projectSize"
-                  value={projectSize}
-                  onChange={(e) => setProjectSize(e.target.value)}
-                  placeholder="e.g., 500 sq. ft."
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                   required
-                  className="w-full p-2 border rounded-lg"
                 />
               </div>
-              <button
-                type="submit"
-                className="w-full bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
-              >
-                Get Free Quote
-              </button>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-2">
+                  Project Details
+                </label>
+                <textarea
+                  name="projectDetails"
+                  value={formData.projectDetails}
+                  onChange={handleInputChange}
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                  placeholder="Please describe your texture matching needs..."
+                  required
+                ></textarea>
+              </div>
+
+              {showSuccess ? (
+                <SuccessScreen onDismiss={() => setShowSuccess(false)} />
+              ) : (
+                <button
+                  type="submit"
+                  className="w-full bg-gray-900 text-white py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors duration-300"
+                >
+                  Submit Quote Request
+                </button>
+              )}
+              <p className="text-sm text-gray-600 text-center">
+                2-hour response • Expert service • Vancouver certified
+              </p>
             </form>
-          )}
+          </div>
         </div>
       </section>
 

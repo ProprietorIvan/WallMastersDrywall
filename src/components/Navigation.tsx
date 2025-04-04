@@ -179,15 +179,15 @@ const Navigation = ({
       </div>
 
       {/* Desktop Navigation */}
-      <div className="hidden lg:block max-w-7xl mx-auto px-4 py-2">
-        <div className="flex items-center justify-between h-20">
+      <div className="hidden lg:block max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center">
-            <div className="relative h-14 w-44">
+            <div className="relative h-12 w-40">
               <Image
                 src="/logo.png"
                 alt="WallMasters Drywall Vancouver"
                 fill
-                sizes="176px"
+                sizes="160px"
                 className="object-contain"
                 priority
               />
