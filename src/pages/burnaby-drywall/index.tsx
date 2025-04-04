@@ -15,6 +15,7 @@ import {
 import Contact from "@/components/Contact";
 import Image from "next/image";
 import { Lead } from "@/utils/createLead";
+import Footer from "@/components/Footer";
 
 type CustomerType = "residential" | "commercial" | null;
 
@@ -35,7 +36,9 @@ const BurnabyDrywallLandingPage = () => {
   const [urgency, setUrgency] = useState("");
   const [projectSize, setProjectSize] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
-  const [formData, setFormData] = useState<Pick<FormData, "name"|"phone"|"email"|"address"|"projectDetails">>({
+  const [formData, setFormData] = useState<
+    Pick<FormData, "name" | "phone" | "email" | "address" | "projectDetails">
+  >({
     name: "",
     phone: "",
     email: "",
@@ -66,21 +69,24 @@ const BurnabyDrywallLandingPage = () => {
       projectSize,
     };
 
-    try{
-      const newLead:Lead = {
+    try {
+      const newLead: Lead = {
         name: formData.name,
         date_Mjj7SnLm: new Date().toISOString(),
         lead_status: "New Lead",
-        status_1_Mjj7KSmv: customerType === 'commercial'? "Commercial Form":"Form Drywall Burnaby",
+        status_1_Mjj7KSmv:
+          customerType === "commercial"
+            ? "Commercial Form"
+            : "Form Drywall Burnaby",
         text_Mjj7Hg3c: `project details: ${formData.projectDetails},urgency: ${urgency}, customer type: ${customerType}, facility type: ${facilityType}, project size:${projectSize}`,
         numbers_Mjj7fpib: 0,
         job_location_mkm418ra: formData.address,
         lead_phone: formData.phone,
         lead_email: formData.email,
-        status_1_Mjj77YUc: 'Drywall Repair',
+        status_1_Mjj77YUc: "Drywall Repair",
         status_1_Mjj7Dz0C: "No Payment Due",
-        status_1_Mjj7nPIN: "Not Insurance"
-      }
+        status_1_Mjj7nPIN: "Not Insurance",
+      };
       fetch("/api/monday", {
         method: "POST",
         headers: {
@@ -88,11 +94,10 @@ const BurnabyDrywallLandingPage = () => {
         },
         body: JSON.stringify(newLead),
       });
-    }catch(e){
-      console.warn(e)
+    } catch (e) {
+      console.warn(e);
     }
     try {
-
       // Replace this with your actual API endpoint
       const response = await fetch("/api/drywall_email", {
         method: "POST",
@@ -126,8 +131,8 @@ const BurnabyDrywallLandingPage = () => {
   };
 
   const handleEmergencyCall = () => {
-    window.location.href = "tel:+1 (778) 653-4862"; // Replace with your phone number
-    
+    window.location.href = "tel:+17789074485"; // WallMasters Drywall phone number
+
     const yourhome = document.querySelector("#contactform");
     if (yourhome) {
       yourhome.scrollIntoView({ behavior: "smooth", inline: "nearest" });
@@ -135,9 +140,71 @@ const BurnabyDrywallLandingPage = () => {
   };
 
   // SEO-friendly data:
-  const pageTitle = "Burnaby's Premier Drywall Experts | Fast & Reliable Repairs";
+  const pageTitle =
+    "Burnaby's Premier Drywall Experts | Fast & Reliable Repairs";
   const pageDescription =
     "Looking for top drywall repair and installation services in Burnaby? Our certified team guarantees 2-hour response times and exceptional workmanship.";
+
+  // Structured data for LocalBusiness
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "WallMasters Drywall Burnaby",
+    image: "https://drywallvan.ca/photos/homepage/1.jpg",
+    url: "https://drywallvan.ca/burnaby-drywall",
+    telephone: "+17789074485",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Burnaby",
+      addressRegion: "BC",
+      addressCountry: "CA",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: "49.2488",
+      longitude: "-122.9805",
+    },
+    areaServed: {
+      "@type": "City",
+      name: "Burnaby",
+    },
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ],
+      opens: "08:00",
+      closes: "20:00",
+    },
+    priceRange: "$$",
+  };
+
+  // Structured data for Service
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Burnaby Drywall Services",
+    provider: {
+      "@type": "LocalBusiness",
+      name: "WallMasters Drywall Burnaby",
+    },
+    serviceType: "Drywall Repair and Installation",
+    areaServed: "Burnaby, BC",
+    description:
+      "Professional drywall repair and installation services in Burnaby. Specializing in residential and commercial projects with 2-hour response times.",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "CAD",
+      availability: "https://schema.org/InStock",
+    },
+  };
 
   const serviceFeatures = [
     {
@@ -218,12 +285,46 @@ const BurnabyDrywallLandingPage = () => {
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
-        <meta name="keywords" content="burnaby drywall, drywall repair burnaby, drywall installation, commercial drywall, burnaby renovations" />
+        <meta
+          name="keywords"
+          content="burnaby drywall, drywall repair burnaby, drywall installation, commercial drywall, burnaby renovations"
+        />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.your-website.com/burnaby-drywall" />
-        <link rel="canonical" href="https://www.your-website.com/burnaby-drywall" />
+        <meta
+          property="og:url"
+          content="https://drywallvan.ca/burnaby-drywall"
+        />
+        <meta
+          property="og:image"
+          content="https://drywallvan.ca/photos/homepage/1.jpg"
+        />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta
+          name="twitter:image"
+          content="https://drywallvan.ca/photos/homepage/1.jpg"
+        />
+
+        <link rel="canonical" href="https://drywallvan.ca/burnaby-drywall" />
+
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        />
       </Head>
 
       <Navigation transparent />
@@ -248,51 +349,41 @@ const BurnabyDrywallLandingPage = () => {
 
               <button
                 onClick={handleEmergencyCall}
-                className="group inline-flex items-center justify-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-gray-800 transition-all duration-300"
+                className="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white bg-red-600 rounded-full hover:bg-red-700"
               >
-                <Phone className="w-6 h-6" />
-                <span>Get Started Now</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <Phone className="w-4 h-4" />
+                <span>Emergency Drywall Repair: 778-907-4485</span>
               </button>
             </div>
-
             <div className="w-full md:w-1/2">
-              <div className="relative h-[600px] w-full">
+              <div className="relative h-[400px] md:h-[500px] w-full">
                 <Image
-                  src="/photos/homepage/2.jpg"
-                  alt="Burnaby Professional Drywall"
+                  src="/photos/homepage/1.jpg"
+                  alt="Burnaby Drywall Repair Expert Services"
                   fill
+                  className="rounded-lg shadow-2xl object-cover object-center"
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover rounded-xl"
                   priority
                 />
-                <div className="absolute inset-0 rounded-xl ring-1 ring-black/10" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">
-              Premium Drywall Services
-            </h2>
-            <p className="text-lg text-gray-600">
-              Burnaby&apos;s most trusted repair specialists
-            </p>
-          </div>
-
+      {/* Service Features */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {serviceFeatures.map((feature, index) => (
               <div
                 key={index}
-                className="bg-gray-50 p-6 rounded-xl hover:shadow-lg transition-shadow duration-300"
+                className="bg-gray-50 p-6 rounded-xl border border-gray-100 hover:shadow-md transition-shadow"
               >
-                <div className="text-gray-900 mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <div className="p-3 bg-white inline-block rounded-lg shadow-sm mb-4">
+                  {feature.icon}
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>
               </div>
             ))}
@@ -300,32 +391,31 @@ const BurnabyDrywallLandingPage = () => {
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-20 bg-gray-50">
+      {/* Service Types */}
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">
-              Our Services
+            <h2 className="text-3xl font-bold">
+              Professional Drywall Services in Burnaby
             </h2>
-            <p className="text-lg text-gray-600">
-              Comprehensive drywall solutions for Burnaby properties
+            <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+              Complete drywall solutions for residential and commercial
+              properties in Burnaby.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {serviceTypes.map((type, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {serviceTypes.map((service, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-xl hover:shadow-lg transition-shadow duration-300"
+                className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow"
               >
-                <h3 className="text-2xl font-bold mb-4 text-gray-900">
-                  {type.title}
-                </h3>
+                <h3 className="text-xl font-bold mb-4">{service.title}</h3>
                 <ul className="space-y-3">
-                  {type.points.map((point, pointIndex) => (
-                    <li key={pointIndex} className="flex items-center gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-gray-900" />
-                      <span className="text-gray-600">{point}</span>
+                  {service.points.map((point, idx) => (
+                    <li key={idx} className="flex items-start gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>{point}</span>
                     </li>
                   ))}
                 </ul>
@@ -336,359 +426,263 @@ const BurnabyDrywallLandingPage = () => {
       </section>
 
       {/* Form Section */}
-      <section className="py-20 bg-white" id="contactform">
-        <div className="max-w-3xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
-              Request a Quote
-            </h2>
-            <p className="text-lg text-gray-600">
-              2-hour response • Burnaby-wide service
-            </p>
-          </div>
+      <section
+        id="contactform"
+        className="py-16 bg-white overflow-hidden relative"
+      >
+        <div className="absolute inset-0 bg-grid-gray-100 bg-[size:32px_32px] [mask-image:linear-gradient(to_bottom,white,transparent)]" />
 
-          <div className="bg-gray-50 rounded-2xl shadow-lg p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Property Type Selection */}
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                <button
-                  type="button"
-                  onClick={() => setCustomerType("residential")}
-                  className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                    customerType === "residential"
-                      ? "border-gray-900 bg-gray-900/5"
-                      : "border-gray-200 hover:border-gray-900"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Home
-                      className={`w-5 h-5 ${
-                        customerType === "residential"
-                          ? "text-gray-900"
-                          : "text-gray-600"
-                      }`}
-                    />
-                    <div>
-                      <h3
-                        className={`text-lg font-semibold mb-1 ${
+        {showSuccess ? (
+          <SuccessScreen
+            email={formData.email}
+            setShowSuccess={setShowSuccess}
+          />
+        ) : (
+          <div className="max-w-7xl mx-auto px-4 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="text-3xl font-bold mb-6">
+                  Get Your Free Burnaby Drywall Quote
+                </h2>
+                <p className="text-lg text-gray-600 mb-8">
+                  Fill out the form below and our team will provide you with a
+                  competitive quote for your drywall project in Burnaby.
+                </p>
+
+                <div className="bg-gray-50 p-6 rounded-xl mb-8">
+                  <h3 className="text-xl font-semibold mb-4">Why Choose Us</h3>
+                  <ul className="space-y-3">
+                    {[
+                      "Free detailed quotes with no obligation",
+                      "Expert technicians with 20+ years of experience",
+                      "Premium materials and superior finishes",
+                      "Licensed, insured, and guaranteed work",
+                    ].map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-white p-8 rounded-xl shadow-xl">
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-6">
+                    <h3 className="text-xl font-bold mb-4">
+                      I&apos;m requesting a quote for:
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <button
+                        type="button"
+                        className={`p-4 rounded-lg border ${
                           customerType === "residential"
-                            ? "text-gray-900"
-                            : "text-gray-900"
-                        }`}
+                            ? "bg-black text-white border-black"
+                            : "border-gray-200 hover:border-gray-400"
+                        } flex items-center justify-center gap-2 transition-colors`}
+                        onClick={() => setCustomerType("residential")}
                       >
-                        Residential
-                      </h3>
-                      <p className="text-sm text-gray-600">Home repairs</p>
-                    </div>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setCustomerType("commercial")}
-                  className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                    customerType === "commercial"
-                      ? "border-gray-900 bg-gray-900/5"
-                      : "border-gray-200 hover:border-gray-900"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Building2
-                      className={`w-5 h-5 ${
-                        customerType === "commercial"
-                          ? "text-gray-900"
-                          : "text-gray-600"
-                      }`}
-                    />
-                    <div>
-                      <h3
-                        className={`text-lg font-semibold mb-1 ${
+                        <Home className="w-5 h-5" />
+                        <span>Residential</span>
+                      </button>
+                      <button
+                        type="button"
+                        className={`p-4 rounded-lg border ${
                           customerType === "commercial"
-                            ? "text-gray-900"
-                            : "text-gray-900"
-                        }`}
+                            ? "bg-black text-white border-black"
+                            : "border-gray-200 hover:border-gray-400"
+                        } flex items-center justify-center gap-2 transition-colors`}
+                        onClick={() => setCustomerType("commercial")}
                       >
-                        Commercial
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Business solutions
-                      </p>
+                        <Building2 className="w-5 h-5" />
+                        <span>Commercial</span>
+                      </button>
                     </div>
                   </div>
-                </button>
-              </div>
 
-              {/* Contact Form */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-900 mb-2">
-                    Phone *
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                    required
-                  />
-                </div>
-              </div>
+                  {customerType === "commercial" && (
+                    <div className="mb-6">
+                      <label
+                        htmlFor="facilityType"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
+                        Facility Type
+                      </label>
+                      <select
+                        id="facilityType"
+                        value={facilityType}
+                        onChange={(e) => setFacilityType(e.target.value)}
+                        className="block w-full p-3 border border-gray-300 rounded-lg focus:ring-black focus:border-black"
+                        required={customerType === "commercial"}
+                      >
+                        <option value="">Select Facility Type</option>
+                        {facilityTypes.map((type) => (
+                          <option key={type} value={type}>
+                            {type}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
 
-              {customerType === "commercial" && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Facility Type *
-                    </label>
-                    <select
-                      name="facilityType"
-                      value={facilityType}
-                      onChange={(e) => {
-                        setFacilityType(e.target.value);
-                        handleInputChange(e);
-                      }}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                      required
+                  <div className="mb-6">
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium text-gray-700 mb-2"
                     >
-                      <option value="">Select facility type</option>
-                      {facilityTypes.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Project Size (sq ft) *
+                      Your Name
                     </label>
                     <input
-                      type="number"
-                      name="projectSize"
-                      value={projectSize}
-                      onChange={(e) => {
-                        setProjectSize(e.target.value);
-                        handleInputChange(e);
-                      }}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                      placeholder="Enter approximate square footage"
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="block w-full p-3 border border-gray-300 rounded-lg focus:ring-black focus:border-black"
                       required
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-900 mb-2">
-                      Urgency *
-                    </label>
-                    <select
-                      name="urgency"
-                      value={urgency}
-                      onChange={(e) => {
-                        setUrgency(e.target.value);
-                        handleInputChange(e);
-                      }}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                      required
-                    >
-                      <option value="">Select urgency level</option>
-                      <option value="emergency">
-                        Emergency (Need immediate attention)
-                      </option>
-                      <option value="urgent">Urgent (Within 24 hours)</option>
-                      <option value="standard">Standard (Within a week)</option>
-                      <option value="planned">Planned Project (Flexible timing)</option>
-                    </select>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <label
+                        htmlFor="phone"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="block w-full p-3 border border-gray-300 rounded-lg focus:ring-black focus:border-black"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="block w-full p-3 border border-gray-300 rounded-lg focus:ring-black focus:border-black"
+                        required
+                      />
+                    </div>
                   </div>
-                </>
-              )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Email *
-                </label>
-                <input
-                  type="text"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  required
-                />
+                  <div className="mb-6">
+                    <label
+                      htmlFor="address"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Project Address
+                    </label>
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      className="block w-full p-3 border border-gray-300 rounded-lg focus:ring-black focus:border-black"
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-6">
+                    <label
+                      htmlFor="projectDetails"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
+                      Project Details
+                    </label>
+                    <textarea
+                      id="projectDetails"
+                      name="projectDetails"
+                      value={formData.projectDetails}
+                      onChange={handleInputChange}
+                      rows={4}
+                      className="block w-full p-3 border border-gray-300 rounded-lg focus:ring-black focus:border-black"
+                      required
+                    ></textarea>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <label
+                        htmlFor="projectSize"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
+                        Project Size
+                      </label>
+                      <select
+                        id="projectSize"
+                        value={projectSize}
+                        onChange={(e) => setProjectSize(e.target.value)}
+                        className="block w-full p-3 border border-gray-300 rounded-lg focus:ring-black focus:border-black"
+                      >
+                        <option value="">Select Project Size</option>
+                        <option value="Small">Small (Under 100 sq ft)</option>
+                        <option value="Medium">Medium (100-500 sq ft)</option>
+                        <option value="Large">Large (500-1000 sq ft)</option>
+                        <option value="Very Large">
+                          Very Large (1000+ sq ft)
+                        </option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="urgency"
+                        className="block text-sm font-medium text-gray-700 mb-2"
+                      >
+                        Urgency
+                      </label>
+                      <select
+                        id="urgency"
+                        value={urgency}
+                        onChange={(e) => setUrgency(e.target.value)}
+                        className="block w-full p-3 border border-gray-300 rounded-lg focus:ring-black focus:border-black"
+                      >
+                        <option value="">Select Urgency</option>
+                        <option value="Emergency">
+                          Emergency (Need it now)
+                        </option>
+                        <option value="Urgent">Urgent (Within 48 hours)</option>
+                        <option value="Standard">
+                          Standard (Within 1 week)
+                        </option>
+                        <option value="Flexible">
+                          Flexible (Within 2-4 weeks)
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-3 px-4 bg-black text-white rounded-lg hover:bg-gray-800 flex items-center justify-center gap-2"
+                  >
+                    <span>Request Free Quote</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Property Address *
-                </label>
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Project Details
-                </label>
-                <textarea
-                  name="projectDetails"
-                  value={formData.projectDetails}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-gray-900 focus:border-transparent"
-                  placeholder="Please describe your project requirements..."
-                ></textarea>
-              </div>
-
-              {showSuccess ? (
-                <SuccessScreen
-                  email={formData.email}
-                  setShowSuccess={setShowSuccess}
-                />
-              ) : (
-                <button
-                  type="submit"
-                  className="w-full bg-gray-900 text-white py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition-colors duration-300"
-                >
-                  Submit Quote Request
-                </button>
-              )}
-
-              <p className="text-sm text-gray-600 text-center">
-                2-hour response • Expert service • Burnaby certified
-              </p>
-            </form>
-          </div>
-        </div>
-        <Contact />
-      </section>
-
-      {/* Results Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold mb-6 text-gray-900">
-                Proven Excellence
-              </h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Our certified team delivers comprehensive drywall solutions,
-                transforming Burnaby properties with precision and expertise.
-              </p>
-              <ul className="space-y-4">
-                {[
-                  "Professional damage assessment",
-                  "BC-certified processes",
-                  "Premium materials",
-                  "Satisfaction guaranteed",
-                ].map((item, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-gray-900" />
-                    <span className="text-gray-600 font-medium">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="relative h-[500px]">
-              <Image
-                src="/photos/homepage/1.jpg"
-                alt="Burnaby Drywall Excellence"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover rounded-xl"
-                priority
-              />
-              <div className="absolute inset-0 rounded-xl ring-1 ring-black/10" />
             </div>
           </div>
-        </div>
+        )}
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-gray-900">
-              Common Questions
-            </h2>
-            <p className="text-lg text-gray-600">
-              Everything you need to know about our drywall services in Burnaby
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            {[
-              {
-                question: "How quickly can you respond to emergency repairs?",
-                answer:
-                  "We guarantee a 2-hour response time for emergency services across Burnaby. Our team is available 24/7 to handle urgent drywall repairs.",
-              },
-              {
-                question:
-                  "Do you handle both residential and commercial projects?",
-                answer:
-                  "Yes, we specialize in both residential and commercial drywall services. From small home repairs to large-scale commercial renovations, our team has the expertise to handle any project in Burnaby.",
-              },
-              {
-                question: "Are you licensed and insured?",
-                answer:
-                  "Absolutely. We are fully licensed and insured in Burnaby, providing you complete peace of mind for any drywall project we undertake.",
-              },
-              {
-                question: "What types of drywall services do you offer?",
-                answer:
-                  "We offer a comprehensive range of services including water damage repair, hole patching, crack repair, texture matching, complete wall installations, and professional finishing.",
-              },
-            ].map((faq, index) => (
-              <div key={index} className="bg-white p-6 rounded-xl">
-                <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                  {faq.question}
-                </h3>
-                <p className="text-gray-600">{faq.answer}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA Section */}
-      <section className="py-16 bg-gray-900">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-            Burnaby&apos;s Trusted Drywall Experts
-          </h2>
-          <p className="text-xl mb-8 text-gray-300">
-            Professional drywall services across Burnaby
-          </p>
-          <button
-            onClick={handleEmergencyCall}
-            className="group inline-flex items-center justify-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-full text-xl font-bold hover:bg-gray-100 transition-all duration-300"
-          >
-            <Phone className="w-6 h-6" />
-            <span>Get Started Now</span>
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
-      </section>
+      <Footer />
     </div>
   );
 };
@@ -701,27 +695,27 @@ const SuccessScreen = ({
   setShowSuccess: (val: boolean) => void;
 }) => {
   return (
-    <div className="p-8 flex flex-col items-center justify-center space-y-6 min-h-[400px]">
-      <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-4">
-        <Check className="w-8 h-8 text-green-500" />
-      </div>
-      <h3 className="text-2xl font-medium text-gray-900">Message received</h3>
-
-      <div className="space-y-2 text-center">
-        <p className="text-gray-600">We&apos;ll get back to you shortly</p>
-        <p className="text-gray-500 text-sm">
-          Response will be sent to your email
+    <div className="max-w-xl mx-auto px-4 py-16 text-center">
+      <div className="bg-white p-8 rounded-xl shadow-xl">
+        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Check className="w-8 h-8 text-green-600" />
+        </div>
+        <h2 className="text-2xl font-bold mb-4">Quote Request Received!</h2>
+        <p className="text-gray-600 mb-6">
+          Thank you for contacting WallMasters Drywall. We&apos;ve received your
+          request and will get back to you shortly with a detailed quote for
+          your Burnaby project.
         </p>
+        <p className="text-gray-600 mb-8">
+          A confirmation has been sent to <strong>{email}</strong>
+        </p>
+        <button
+          onClick={() => setShowSuccess(false)}
+          className="inline-block py-3 px-6 bg-black text-white rounded-lg hover:bg-gray-800"
+        >
+          Return to Home
+        </button>
       </div>
-
-      <button
-        onClick={() => {
-          setShowSuccess(false);
-        }}
-        className="mt-8 bg-gray-900 text-white px-8 py-3 rounded-full hover:bg-[#ffc527] hover:text-black"
-      >
-        Done
-      </button>
     </div>
   );
 };

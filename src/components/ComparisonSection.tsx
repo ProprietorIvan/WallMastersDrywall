@@ -23,7 +23,7 @@ const ComparisonSection = () => {
       description:
         "From small holes and cracks to extensive water damage, WallMasters Drywall provides expert repair services that seamlessly match your existing wall texture.",
       buttonText: "DRYWALL REPAIR",
-      image: "/photos/homepage/DrywallRepair.jpg",
+      image: "/photos/homepage/Repair.png",
       orientation: "right",
       url: "/drywall-repair",
     },
@@ -32,7 +32,7 @@ const ComparisonSection = () => {
       description:
         "Whether you're building a new space or renovating an existing one, WallMasters delivers professional drywall installation with meticulous attention to detail.",
       buttonText: "DRYWALL INSTALLATION",
-      image: "/photos/homepage/1.jpg",
+      image: "/photos/homepage/NewDrywall.png",
       orientation: "left",
       url: "/drywall-installation",
     },
@@ -41,7 +41,7 @@ const ComparisonSection = () => {
       description:
         "Our skilled technicians are experts at matching existing wall textures, ensuring seamless repairs that blend perfectly with your walls.",
       buttonText: "TEXTURE SERVICES",
-      image: "/photos/homepage/BeforeAfter.jpg",
+      image: "/photos/homepage/BeforeAfter.png",
       orientation: "right",
       url: "/texture-matching",
     },
@@ -50,7 +50,7 @@ const ComparisonSection = () => {
       description:
         "WallMasters provides specialized drywall solutions for commercial properties, including offices, retail spaces, restaurants, and industrial facilities.",
       buttonText: "COMMERCIAL SERVICES",
-      image: "/photos/homepage/2.jpg",
+      image: "/photos/homepage/Commercial.png",
       orientation: "left",
       url: "/commercial-drywall",
     },

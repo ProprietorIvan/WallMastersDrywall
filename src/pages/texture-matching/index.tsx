@@ -1,14 +1,143 @@
-import React from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import Contact from "@/components/Contact";
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import {
+  CheckCircle2,
+  ArrowRight,
+  Phone,
+  Ruler,
+  Clock,
+  Shield,
+  Building2,
+  Home as HomeIcon,
+  Check,
+} from "lucide-react";
 import Image from "next/image";
 import type { NextPage } from "next";
-import SimpleContactForm from "@/components/SimpleContactForm";
+import { Lead } from "@/utils/createLead";
+
+type CustomerType = "residential" | "commercial" | null;
+
+interface FormData {
+  name: string;
+  phone: string;
+  facilityType: string;
+  projectSize: string;
+  urgency: string;
+  email: string;
+  address: string;
+  projectDetails: string;
+}
 
 const TextureMatchingPage: NextPage = () => {
+  const [customerType, setCustomerType] = useState<CustomerType>(null);
+  const [facilityType, setFacilityType] = useState("");
+  const [urgency, setUrgency] = useState("");
+  const [projectSize, setProjectSize] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [formData, setFormData] = useState<
+    Pick<FormData, "name" | "phone" | "email" | "address" | "projectDetails">
+  >({
+    name: "",
+    phone: "",
+    email: "",
+    address: "",
+    projectDetails: "",
+  });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const submissionData = {
+      ...formData,
+      customerType,
+      facilityType,
+      urgency,
+      projectSize,
+    };
+    try {
+      const newLead: Lead = {
+        name: formData.name,
+        date_Mjj7SnLm: new Date().toISOString(),
+        lead_status: "New Lead",
+        status_1_Mjj7KSmv:
+          customerType === "commercial" ? "Commercial Form" : "Form Drywall",
+        text_Mjj7Hg3c: `project details: ${formData.projectDetails},urgency: ${urgency}, customer type: ${customerType}, facility type: ${facilityType}, project size:${projectSize}`,
+        numbers_Mjj7fpib: 0,
+        job_location_mkm418ra: formData.address,
+        lead_phone: formData.phone,
+        lead_email: formData.email,
+        status_1_Mjj77YUc: "Drywall Repair",
+        status_1_Mjj7Dz0C: "No Payment Due",
+        status_1_Mjj7nPIN: "Not Insurance",
+      };
+      fetch("/api/monday", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newLead),
+      });
+    } catch (e) {
+      console.warn(e);
+    }
+    try {
+      const response = await fetch("/api/drywall_email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submissionData),
+      });
+
+      if (response.ok) {
+        // Reset form
+        setShowSuccess(true);
+        setFormData({
+          name: "",
+          phone: "",
+          email: "",
+          address: "",
+          projectDetails: "",
+        });
+        setCustomerType(null);
+        setFacilityType("");
+        setUrgency("");
+        setProjectSize("");
+      } else {
+        throw new Error("Failed to submit quote request");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("There was an error submitting your request. Please try again.");
+    }
+  };
+
+  const facilityTypes = [
+    "Office Building",
+    "Retail Store",
+    "Restaurant",
+    "Warehouse",
+    "Medical Facility",
+    "Educational Institution",
+    "Hotel/Hospitality",
+    "Industrial Space",
+  ];
+
   const textureServices = [
     {
       title: "Popcorn Ceiling Matching",
@@ -52,6 +181,63 @@ const TextureMatchingPage: NextPage = () => {
     },
   ];
 
+  // Structured data for LocalBusiness
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "WallMasters Drywall Vancouver",
+    image: "https://drywallvan.ca/photos/homepage/BeforeAfter.jpg",
+    url: "https://drywallvan.ca/texture-matching",
+    telephone: "+17789074485",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Vancouver",
+      addressRegion: "BC",
+      addressCountry: "CA",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: "49.2827",
+      longitude: "-123.1207",
+    },
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ],
+      opens: "08:00",
+      closes: "20:00",
+    },
+    priceRange: "$$",
+  };
+
+  // Structured data for Service
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Drywall Texture Matching Services",
+    provider: {
+      "@type": "LocalBusiness",
+      name: "WallMasters Drywall Vancouver",
+    },
+    serviceType: "Texture Matching",
+    areaServed: "Vancouver Metropolitan Area",
+    description:
+      "Expert drywall texture matching services including popcorn ceiling, orange peel, knockdown, and custom texture matching with seamless integration.",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "CAD",
+      availability: "https://schema.org/InStock",
+    },
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Head>
@@ -63,6 +249,10 @@ const TextureMatchingPage: NextPage = () => {
           content="Professional drywall texture matching services in Vancouver. Perfect matching of popcorn, orange peel, knockdown, and custom textures. Seamless repairs guaranteed."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="keywords"
+          content="texture matching vancouver, popcorn ceiling repair, orange peel texture, knockdown texture, custom drywall textures"
+        />
 
         {/* Open Graph */}
         <meta property="og:type" content="website" />
@@ -81,6 +271,33 @@ const TextureMatchingPage: NextPage = () => {
         <meta
           property="og:image"
           content="https://drywallvan.ca/photos/homepage/BeforeAfter.jpg"
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Expert Drywall Texture Matching Vancouver | WallMasters Drywall"
+        />
+        <meta
+          name="twitter:description"
+          content="Professional texture matching services in Vancouver with seamless integration guaranteed."
+        />
+        <meta
+          name="twitter:image"
+          content="https://drywallvan.ca/photos/homepage/BeforeAfter.jpg"
+        />
+
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusinessSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
         />
       </Head>
 
@@ -218,11 +435,179 @@ const TextureMatchingPage: NextPage = () => {
       {/* Contact Form */}
       <section id="contact" className="py-20 bg-gray-50">
         <div className="max-w-xl mx-auto">
-          <SimpleContactForm
-            formTitle="Get a Free Texture Matching Quote"
-            serviceName="Texture Matching"
-            apiEndpoint="/api/drywall_email"
-          />
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Get a Free Texture Matching Quote
+          </h2>
+          <p className="text-center mb-8">
+            Fill out the form below to get started with your texture matching
+            project. Our team will get back to you shortly with a free,
+            no-obligation quote.
+          </p>
+          {showSuccess ? (
+            <SuccessScreen onDismiss={() => setShowSuccess(false)} />
+          ) : (
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label htmlFor="name" className="block mb-2">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full p-2 border rounded-lg"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="phone" className="block mb-2">
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full p-2 border rounded-lg"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="email" className="block mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full p-2 border rounded-lg"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="address" className="block mb-2">
+                  Address
+                </label>
+                <textarea
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full p-2 border rounded-lg"
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="projectDetails" className="block mb-2">
+                  Project Details
+                </label>
+                <textarea
+                  id="projectDetails"
+                  name="projectDetails"
+                  value={formData.projectDetails}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full p-2 border rounded-lg"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block mb-2">Customer Type</label>
+                <div className="flex space-x-4">
+                  <button
+                    type="button"
+                    className={`flex-1 py-2 px-4 rounded-lg border ${
+                      customerType === "residential"
+                        ? "bg-black text-white"
+                        : "bg-white text-black"
+                    }`}
+                    onClick={() => setCustomerType("residential")}
+                  >
+                    <HomeIcon className="w-5 h-5 inline mr-2" />
+                    Residential
+                  </button>
+                  <button
+                    type="button"
+                    className={`flex-1 py-2 px-4 rounded-lg border ${
+                      customerType === "commercial"
+                        ? "bg-black text-white"
+                        : "bg-white text-black"
+                    }`}
+                    onClick={() => setCustomerType("commercial")}
+                  >
+                    <Building2 className="w-5 h-5 inline mr-2" />
+                    Commercial
+                  </button>
+                </div>
+              </div>
+              {customerType === "commercial" && (
+                <div className="mb-4">
+                  <label htmlFor="facilityType" className="block mb-2">
+                    Facility Type
+                  </label>
+                  <select
+                    id="facilityType"
+                    name="facilityType"
+                    value={facilityType}
+                    onChange={(e) => setFacilityType(e.target.value)}
+                    required
+                    className="w-full p-2 border rounded-lg"
+                  >
+                    <option value="">Select facility type</option>
+                    {facilityTypes.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              <div className="mb-4">
+                <label htmlFor="urgency" className="block mb-2">
+                  How urgent is your project?
+                </label>
+                <select
+                  id="urgency"
+                  name="urgency"
+                  value={urgency}
+                  onChange={(e) => setUrgency(e.target.value)}
+                  required
+                  className="w-full p-2 border rounded-lg"
+                >
+                  <option value="">Select urgency</option>
+                  <option value="Immediate">Immediate</option>
+                  <option value="Within 1 week">Within 1 week</option>
+                  <option value="Within 2 weeks">Within 2 weeks</option>
+                  <option value="Within 1 month">Within 1 month</option>
+                </select>
+              </div>
+              <div className="mb-6">
+                <label htmlFor="projectSize" className="block mb-2">
+                  Project Size (approx. sq. ft.)
+                </label>
+                <input
+                  type="text"
+                  id="projectSize"
+                  name="projectSize"
+                  value={projectSize}
+                  onChange={(e) => setProjectSize(e.target.value)}
+                  placeholder="e.g., 500 sq. ft."
+                  required
+                  className="w-full p-2 border rounded-lg"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                Get Free Quote
+              </button>
+            </form>
+          )}
         </div>
       </section>
 
@@ -232,3 +617,26 @@ const TextureMatchingPage: NextPage = () => {
 };
 
 export default TextureMatchingPage;
+
+const SuccessScreen = ({ onDismiss }: { onDismiss: () => void }) => {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg p-8 max-w-md w-full">
+        <div className="flex flex-col items-center text-center">
+          <CheckCircle2 className="w-16 h-16 text-green-500 mb-4" />
+          <h3 className="text-2xl font-bold mb-2">Message Received!</h3>
+          <p className="text-gray-600 mb-6">
+            Thank you for contacting Wall Masters Drywall. We&apos;ll get back
+            to you shortly about your texture matching project.
+          </p>
+          <button
+            onClick={onDismiss}
+            className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
