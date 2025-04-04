@@ -25,7 +25,7 @@ const ComparisonSection = () => {
       buttonText: "DRYWALL REPAIR",
       image: "/photos/homepage/DrywallRepair.jpg",
       orientation: "right",
-      url: "/drywall",
+      url: "/drywall-repair",
     },
     {
       title: "NEW DRYWALL INSTALLATION",
@@ -34,7 +34,7 @@ const ComparisonSection = () => {
       buttonText: "DRYWALL INSTALLATION",
       image: "/photos/homepage/1.jpg",
       orientation: "left",
-      url: "/drywall",
+      url: "/drywall-installation",
     },
     {
       title: "TEXTURE MATCHING",
@@ -43,7 +43,7 @@ const ComparisonSection = () => {
       buttonText: "TEXTURE SERVICES",
       image: "/photos/homepage/BeforeAfter.jpg",
       orientation: "right",
-      url: "/drywall",
+      url: "/texture-matching",
     },
     {
       title: "COMMERCIAL DRYWALL",
@@ -52,7 +52,7 @@ const ComparisonSection = () => {
       buttonText: "COMMERCIAL SERVICES",
       image: "/photos/homepage/2.jpg",
       orientation: "left",
-      url: "/drywall",
+      url: "/commercial-drywall",
     },
   ];
 
