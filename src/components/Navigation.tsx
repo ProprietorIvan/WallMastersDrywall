@@ -98,9 +98,8 @@ const Navigation = ({
 
   const navClasses = `
     w-full z-50 transition-all duration-300
-    ${isHomepage ? "lg:absolute bg-white lg:bg-transparent" : "bg-white"}
+    bg-white px-0 py-0
     ${!isHomepage && isScrolled ? "shadow-lg" : ""}
-    lg:fixed
   `;
 
   return (
@@ -200,11 +199,7 @@ const Navigation = ({
               <Link
                 key={link.url}
                 href={link.url}
-                className={`text-base font-medium ${
-                  isHomepage
-                    ? "text-white hover:text-yellow-400"
-                    : "text-gray-900 hover:text-yellow-600"
-                } transition-colors`}
+                className="text-base font-medium text-gray-900 hover:text-yellow-600 transition-colors"
               >
                 {link.text}
               </Link>
@@ -216,22 +211,14 @@ const Navigation = ({
                 displayText={phoneNumber}
                 href={`tel:${phoneNumberClean}`}
                 icon={<Phone className="w-5 h-5" />}
-                className={
-                  isHomepage
-                    ? "text-white hover:text-yellow-400"
-                    : "text-gray-900 hover:text-yellow-600"
-                }
+                className="text-gray-900 hover:text-yellow-600"
               />
               <ContactButton
                 textToCopy={email}
                 displayText={email}
                 href={`mailto:${email}`}
                 icon={<Mail className="w-5 h-5" />}
-                className={
-                  isHomepage
-                    ? "text-white hover:text-yellow-400"
-                    : "text-gray-900 hover:text-yellow-600"
-                }
+                className="text-gray-900 hover:text-yellow-600"
               />
             </div>
           </div>
