@@ -116,8 +116,8 @@ const ContactUs = () => {
             Contact WallMasters Drywall
           </h1>
           <p className="text-xl sm:text-2xl text-white/90 max-w-2xl mx-auto">
-            Vancouver's trusted drywall experts for repairs, installation, and
-            commercial projects
+            Vancouver&apos;s trusted drywall experts for repairs, installation,
+            and commercial projects
           </p>
         </div>
       </section>
