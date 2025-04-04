@@ -98,13 +98,13 @@ const ComparisonSection = () => {
       <div className="w-full md:w-1/2 relative group overflow-hidden">
         <a href={service.url} className="block cursor-pointer">
           <div className="relative overflow-hidden rounded-xl shadow-2xl transform transition-transform duration-500 hover:-translate-y-2">
-            <div className="relative w-full h-[200px] md:h-[300px]">
+            <div className="relative w-full h-[300px] md:h-[400px]">
               <Image
                 src={service.image}
                 alt={`${service.title} - Professional drywall services in Vancouver`}
                 className="transition-transform duration-700 group-hover:scale-110"
                 fill
-                style={{ objectFit: "cover" }}
+                style={{ objectFit: "contain" }}
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority={index === 0}
                 quality={85}

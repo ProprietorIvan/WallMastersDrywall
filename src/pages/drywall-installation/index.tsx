@@ -338,10 +338,10 @@ const DrywallInstallationPage: NextPage = () => {
             <div className="w-full lg:w-1/2">
               <div className="relative h-[400px] lg:h-[500px] w-full rounded-xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/photos/homepage/1.jpg"
+                  src="/photos/homepage/NewDrywall.png"
                   alt="Professional drywall installation in Vancouver"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />

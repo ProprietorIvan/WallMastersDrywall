@@ -186,7 +186,7 @@ const TextureMatchingPage: NextPage = () => {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     name: "WallMasters Drywall Vancouver",
-    image: "https://drywallvan.ca/photos/homepage/BeforeAfter.jpg",
+    image: "https://drywallvan.ca/photos/homepage/BeforeAfter.png",
     url: "https://drywallvan.ca/texture-matching",
     telephone: "+17789074485",
     address: {
@@ -270,7 +270,7 @@ const TextureMatchingPage: NextPage = () => {
         />
         <meta
           property="og:image"
-          content="https://drywallvan.ca/photos/homepage/BeforeAfter.jpg"
+          content="https://drywallvan.ca/photos/homepage/BeforeAfter.png"
         />
 
         {/* Twitter Card */}
@@ -285,7 +285,7 @@ const TextureMatchingPage: NextPage = () => {
         />
         <meta
           name="twitter:image"
-          content="https://drywallvan.ca/photos/homepage/BeforeAfter.jpg"
+          content="https://drywallvan.ca/photos/homepage/BeforeAfter.png"
         />
 
         {/* Structured Data */}
@@ -337,10 +337,10 @@ const TextureMatchingPage: NextPage = () => {
             <div className="w-full lg:w-1/2">
               <div className="relative h-[400px] lg:h-[500px] w-full rounded-xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/photos/homepage/BeforeAfter.jpg"
+                  src="/photos/homepage/BeforeAfter.png"
                   alt="Perfect texture matching in Vancouver"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
