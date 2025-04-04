@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { Menu, X, Phone, Mail, Check, ChevronDown } from "lucide-react";
+import { Menu, X, Phone, Mail, Check } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -11,45 +11,57 @@ interface NavigationProps {
 }
 
 interface ContactButtonProps {
-  href: string;
   textToCopy: string;
+  displayText: string;
+  href: string;
   icon: React.ReactNode;
-  text: string;
-  fullWidth?: boolean;
+  className?: string;
 }
 
-const ContactButton: React.FC<ContactButtonProps> = ({
-  href,
+const ContactButton = ({
   textToCopy,
+  displayText,
+  href,
   icon,
-  text,
-  fullWidth = false,
-}) => {
+  className = "",
+}: ContactButtonProps) => {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(textToCopy);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
   };
 
   return (
-    <button
+    <a
+      href={href}
       onClick={handleCopy}
-      className={`group relative inline-flex items-center gap-2 bg-gray-100 text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors ${
-        fullWidth ? "w-full justify-center" : ""
-      }`}
+      className={`relative flex items-center gap-3 w-full transition-colors ${className}`}
     >
       {icon}
-      <a href={href}>{text}</a>
-      <span
-        className={`absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-white transition-opacity ${
-          copied ? "opacity-100" : "opacity-0"
-        }`}
+      <div className="flex-1 min-w-0">
+        <span className="block font-medium truncate">{displayText}</span>
+      </div>
+      <div
+        className={`
+        absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-gray-900 text-white text-xs whitespace-nowrap
+        transition-all duration-200
+        ${
+          copied
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-2 pointer-events-none"
+        }
+      `}
       >
-        <Check className="h-3 w-3" />
-      </span>
-    </button>
+        {copied ? "Copied!" : "Copy to clipboard"}
+      </div>
+    </a>
   );
 };
 
@@ -78,10 +90,10 @@ const Navigation = ({
   }, []);
 
   const navLinks = isHomepage
-    ? [{ text: "Services", url: "/drywall" }]
+    ? [{ text: "Services", url: "/services" }]
     : [
         { text: "Home", url: "/" },
-        { text: "Services", url: "/drywall" },
+        { text: "Services", url: "/services" },
       ];
 
   const navClasses = `
@@ -90,17 +102,6 @@ const Navigation = ({
     ${!isHomepage && isScrolled ? "shadow-lg" : ""}
     lg:fixed
   `;
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
-
-  const services = [
-    { name: "Drywall Repair", href: "/drywall-repair" },
-    { name: "Drywall Installation", href: "/drywall-installation" },
-    { name: "Texture Matching", href: "/texture-matching" },
-    { name: "Commercial Drywall", href: "/commercial-drywall" },
-    { name: "Burnaby Drywall", href: "/burnaby-drywall" },
-  ];
 
   return (
     <nav className={navClasses}>
@@ -111,7 +112,7 @@ const Navigation = ({
           <Link href="/" className="flex items-center">
             <div className="relative h-12 w-36">
               <Image
-                src="/logo.webp"
+                src="/logo.png"
                 alt="WallMasters Drywall Vancouver"
                 fill
                 sizes="144px"
@@ -137,24 +138,26 @@ const Navigation = ({
         <div className="px-4 py-3 bg-gray-50">
           <div className="space-y-2">
             <ContactButton
+              textToCopy={phoneNumber}
+              displayText={phoneNumber}
               href={`tel:${phoneNumberClean}`}
-              textToCopy={phoneNumberClean}
               icon={
                 <div className="flex items-center justify-center w-10 h-10 bg-yellow-500 rounded-full">
                   <Phone className="w-5 h-5 text-white" />
                 </div>
               }
-              text={phoneNumber}
+              className="text-gray-900 hover:text-yellow-600"
             />
             <ContactButton
-              href={`mailto:${email}`}
               textToCopy={email}
+              displayText={email}
+              href={`mailto:${email}`}
               icon={
                 <div className="flex items-center justify-center w-10 h-10 bg-yellow-500 rounded-full">
                   <Mail className="w-5 h-5 text-white" />
                 </div>
               }
-              text={email}
+              className="text-gray-900 hover:text-yellow-600"
             />
           </div>
         </div>
@@ -182,7 +185,7 @@ const Navigation = ({
           <Link href="/" className="flex items-center">
             <div className="relative h-16 w-48">
               <Image
-                src="/logo.webp"
+                src="/logo.png"
                 alt="WallMasters Drywall Vancouver"
                 fill
                 sizes="192px"
@@ -209,61 +212,28 @@ const Navigation = ({
 
             <div className="flex items-center gap-8 pl-8 border-l border-gray-200">
               <ContactButton
+                textToCopy={phoneNumber}
+                displayText={phoneNumber}
                 href={`tel:${phoneNumberClean}`}
-                textToCopy={phoneNumberClean}
                 icon={<Phone className="w-5 h-5" />}
-                text={phoneNumber}
+                className={
+                  isHomepage
+                    ? "text-white hover:text-yellow-400"
+                    : "text-gray-900 hover:text-yellow-600"
+                }
               />
               <ContactButton
-                href={`mailto:${email}`}
                 textToCopy={email}
+                displayText={email}
+                href={`mailto:${email}`}
                 icon={<Mail className="w-5 h-5" />}
-                text={email}
+                className={
+                  isHomepage
+                    ? "text-white hover:text-yellow-400"
+                    : "text-gray-900 hover:text-yellow-600"
+                }
               />
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      <div className={`${isOpen ? "block" : "hidden"} md:hidden`}>
-        <div className="px-2 pt-2 pb-3 space-y-1">
-          <Link
-            href="/"
-            className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-gray-600"
-          >
-            Home
-          </Link>
-          {services.map((service) => (
-            <Link
-              key={service.href}
-              href={service.href}
-              className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-gray-600"
-            >
-              {service.name}
-            </Link>
-          ))}
-          <Link
-            href="/contact"
-            className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-gray-600"
-          >
-            Contact
-          </Link>
-          <div className="mt-4 space-y-2">
-            <ContactButton
-              href={`tel:${phoneNumberClean}`}
-              textToCopy={phoneNumberClean}
-              icon={<Phone className="w-4 h-4" />}
-              text={phoneNumber}
-              fullWidth
-            />
-            <ContactButton
-              href={`mailto:${email}`}
-              textToCopy={email}
-              icon={<Mail className="w-4 h-4" />}
-              text={email}
-              fullWidth
-            />
           </div>
         </div>
       </div>
